@@ -4,6 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gem 'active_storage_validations', '0.8.2'
 gem 'aws-sdk-s3', '1.46.0', require: false
 gem 'bcrypt', '3.1.13'
+gem 'devise', '~> 4.7', '>= 4.7.3'
 gem 'bootsnap', '1.4.5', require: false
 gem 'bootstrap-sass', '3.4.1'
 gem 'bootstrap-will_paginate', '1.0.0'
