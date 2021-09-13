@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_25_000059) do
+ActiveRecord::Schema.define(version: 2021_09_12_122725) do
 
   create_table "group_members", force: :cascade do |t|
     t.integer "group_id"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 2021_04_25_000059) do
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "note_id", null: false
     t.index ["user_id", "created_at"], name: "index_notes_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_notes_on_user_id"
   end
@@ -62,6 +63,7 @@ ActiveRecord::Schema.define(version: 2021_04_25_000059) do
     t.string "last_sign_in_ip"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "user_id", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

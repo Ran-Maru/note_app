@@ -2,7 +2,8 @@ module Api
   module V1
     class NotesController < ApplicationController
       def index
-        render json: {status: 200, message: 'success!' }
+        note = Note.where(user_id: 1)
+        pretty_json note
       end
     end
   end
