@@ -7,7 +7,6 @@ updatet_at = time
 User.create!(email: "d@kakaku.com",
             sign_in_count: "a",
             password: "abcdefg",
-            user_id: user_id,
             created_at: created_at,
             updated_at: updatet_at
             )
@@ -19,7 +18,6 @@ User.create!(email: "d@kakaku.com",
   Note.create!(title: title,
                content: content,
                user_id: user_id,
-               note_id: note_id,
                created_at: created_at,
                updated_at: updatet_at
               )
