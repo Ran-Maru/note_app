@@ -14,7 +14,6 @@ User.create!(email: "d@kakaku.com",
 5.times do |n|
   title = "タイトル#{n + 1}"
   content = "テキスト#{n + 1}"
-  note_id = n +1
   Note.create!(title: title,
                content: content,
                user_id: user_id,

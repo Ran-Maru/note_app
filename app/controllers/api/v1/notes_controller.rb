@@ -1,8 +1,8 @@
 module Api
   module V1
     class NotesController < ApplicationController
-      before_action :pre_check, only: [:update]
-      
+      before_action :pre_check, only: [:update, :throwAway, :destroy]
+
       # FIXME: Can't verify CSRF token authenticity.
       protect_from_forgery
 
@@ -32,11 +32,20 @@ module Api
       end
 
       # メモを削除（ゴミ箱に移動）
-      def thorowAway 
+      def throwAway
+        if @note.update(isTrash: true)
+          response = { status: 'SUCCESS', data: @note }
+        else
+          response = { status: 'ERROR', data: @note.errors }
+        end
+        pretty_json response
       end
+      
       # メモを完全に削除（ゴミ箱から削除）
       def destroy
+        @note.destroy
       end
+      
       # メモを検索
       def search
       end

@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       resources :notes, only: [:index, :create, :update, :destroy] do
         collection do
           # メモを削除（ゴミ箱に移動）
-          post 'throwAway'
+          post '/trash', to: 'notes#throwAway'
           get 'search'
         end
       end
