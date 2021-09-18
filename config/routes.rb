@@ -14,6 +14,7 @@ Rails.application.routes.draw do
           get 'search'
         end
       end
+      # FIXME: labelのURLを/user/:user_id/labelsの形に変更する。
       resources :labels, only: [:index, :create, :update, :destroy]
     end
   end
