@@ -16,6 +16,9 @@ Rails.application.routes.draw do
       end
       # FIXME: labelのURLを/user/:user_id/labelsの形に変更する。
       resources :labels, only: [:index, :create, :update, :destroy]
+
+      # FIXME: labelのURLを/note/:note_id/labelingの形に変更する。
+      resources :labelings, only: [:create, :destroy]
     end
   end
 end
