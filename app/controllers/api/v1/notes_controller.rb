@@ -7,8 +7,11 @@ module Api
       protect_from_forgery
 
       def index
-        note = Note.where(user_id: 1)
-        pretty_json note
+        note = Note.select("notes.*").eager_load(:labels).where(user_id: 1)
+        # ラベル情報をネストしたnoteのjsonを取得し、配列型に変換する。
+        note_data = JSON.parse(note.to_json(include: [{labels: {only: [:id, :name] }}]))
+        response = { status: 'SUCCESS', data: note_data}
+        pretty_json response
       end
 
       def create
@@ -40,12 +43,12 @@ module Api
         end
         pretty_json response
       end
-      
+
       # メモを完全に削除（ゴミ箱から削除）
       def destroy
         @note.destroy
       end
-      
+
       # メモを検索
       def search
       end
