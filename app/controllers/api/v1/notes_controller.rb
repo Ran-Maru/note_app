@@ -7,8 +7,7 @@ module Api
       protect_from_forgery
 
       def index
-        # OPTIMIZE: SQL多重呼び出しが発生しているため要修正（N+1問題？）
-        note = Note.select("notes.*,labels.*").joins(:labels).where(user_id: 1)
+        note = Note.select("notes.*,labels.*").eager_load(:labels).where(user_id: 1)
         # ラベル情報をネストしたnoteのjsonを取得し、配列型に変換する。
         note_data = JSON.parse(note.to_json(:include => [:labels]))
         response = { status: 'SUCCESS', data: note_data}
