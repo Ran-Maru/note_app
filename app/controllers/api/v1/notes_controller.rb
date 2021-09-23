@@ -7,8 +7,12 @@ module Api
       protect_from_forgery
 
       def index
-        note = Note.where(user_id: 1)
-        pretty_json note
+        # OPTIMIZE: SQL多重呼び出しが発生しているため要修正（N+1問題？）
+        note = Note.select("notes.*,labels.*").joins(:labels).where(user_id: 1)
+        # ラベル情報をネストしたnoteのjsonを取得し、配列型に変換する。
+        note_data = JSON.parse(note.to_json(:include => [:labels]))
+        response = { status: 'SUCCESS', data: note_data}
+        pretty_json response
       end
 
       def create
@@ -40,12 +44,12 @@ module Api
         end
         pretty_json response
       end
-      
+
       # メモを完全に削除（ゴミ箱から削除）
       def destroy
         @note.destroy
       end
-      
+
       # メモを検索
       def search
       end
