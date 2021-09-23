@@ -7,9 +7,9 @@ module Api
       protect_from_forgery
 
       def index
-        note = Note.select("notes.*,labels.*").eager_load(:labels).where(user_id: 1)
+        note = Note.select("notes.*").eager_load(:labels).where(user_id: 1)
         # ラベル情報をネストしたnoteのjsonを取得し、配列型に変換する。
-        note_data = JSON.parse(note.to_json(:include => [:labels]))
+        note_data = JSON.parse(note.to_json(include: [{labels: {only: [:id, :name] }}]))
         response = { status: 'SUCCESS', data: note_data}
         pretty_json response
       end
