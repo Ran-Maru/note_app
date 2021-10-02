@@ -8,7 +8,7 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 export default {
   data(){
     return {
@@ -17,12 +17,9 @@ export default {
   },
 methods: {
   getList(){
-    fetch('http://localhost:3000/api/v1/notes')
+    axios.get('http://localhost:3000/api/v1/notes ')
     .then( response => {
-      return response.json()
-    })
-    .then( json => {
-      this.list = json
+      this.list = response.data
     })
     .catch((err) => {
       this.list = err
