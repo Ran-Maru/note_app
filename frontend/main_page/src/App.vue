@@ -1,26 +1,33 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <p>
+      {{list}}
+    </p>
+    <button @click="getList()">一覧取得</button>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  data(){
+    return {
+      list: ''
+    }
+  },
+methods: {
+  getList(){
+    fetch('http://localhost:3000/api/v1/notes')
+    .then( response => {
+      return response.json()
+    })
+    .then( json => {
+      this.list = json
+    })
+    .catch((err) => {
+      this.list = err
+    });
+  }
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
