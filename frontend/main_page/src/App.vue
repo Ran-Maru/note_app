@@ -8,7 +8,7 @@
     <button @click="getList()">一覧取得</button>
       <ul> 
         <li v-for="n of length" :key="n">
-          <Note v-bind:note="notes.data[n]"></Note>
+          <Note v-bind:note="notes.data[n-1]"></Note>
         </li>
       </ul>
     </div>
