@@ -2,12 +2,13 @@ module Api
   module V1
     class NotesController < ApplicationController
       before_action :pre_check, only: [:update, :throwAway, :destroy]
+      before_action :pre_index_check, only: [:index]
 
       # FIXME: Can't verify CSRF token authenticity.
       protect_from_forgery
 
       def index
-        note = Note.select("notes.*").eager_load(:labels).where(user_id: 1)
+        note = Note.select("notes.*").eager_load(:labels).where(user_id: 1, isTrash: @isTrash)
         # ラベル情報をネストしたnoteのjsonを取得し、配列型に変換する。
         note_data = JSON.parse(note.to_json(include: [{labels: {only: [:id, :name] }}]))
         response = { status: 'SUCCESS', data: note_data}
@@ -72,6 +73,12 @@ module Api
         @note = Note.find_by(id: params[:id], user_id: params[:user_id])
         response = { status: 'ERROR', message: 'Resource Not Found' }
         pretty_json response if @note.nil?
+      end
+
+      def pre_index_check
+        # APIの引数で指定がなければ、isTrash = falseで一覧取得をおこなう。
+        @isTrash = params[:isTrash]
+        @isTrash = false if @isTrash.nil?
       end
     end
   end
