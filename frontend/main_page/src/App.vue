@@ -51,7 +51,14 @@ methods: {
       .catch((err) => {
         this.notes = err
       })
-    }
-  }
+  },
+    throwAway(noteId){
+      axios.post('http://localhost:3000/api/v1/notes/trash', {id: noteId, user_id:'1'})
+      .catch((err) => {
+        this.err = err
+      })
+    },
+
+  },
 }
 </script>
