@@ -8,7 +8,7 @@
     <button @click="getList()">一覧取得</button>
       <ul> 
         <li v-for="n of length" :key="n">
-          <Note v-bind:note="notes.data[n-1]"></Note>
+          <NoteListItem v-bind:note="notes.data[n-1]"></NoteListItem>
         </li>
       </ul>
     </div>
@@ -16,12 +16,12 @@
 
 <script>
 import axios from 'axios'
-import Note from './components/Note.vue'
+import NoteListItem from './components/NoteListItem.vue'
 
 export default {
   name: 'App',
   components: {
-    Note
+    NoteListItem
   },
   data(){
     return {

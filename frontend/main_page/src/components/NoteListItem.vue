@@ -13,7 +13,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'Note',
+  name: 'NoteListItem',
   props: {
     note :Object
   },
