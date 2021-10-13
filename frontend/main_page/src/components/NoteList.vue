@@ -17,48 +17,58 @@
 <script>
 import axios from 'axios'
 import NoteListItem from './NoteListItem.vue'
+import { ref }from 'vue'
 
 export default {
   name: 'NoteList',
   components: {
     NoteListItem
   },
-  data(){
-    return {
-      notes: '',
-      length: '',
-      title:'',
-      content: ''
-    }
-  },
-methods: {
-  getList(){
-    axios.get('http://localhost:3000/api/v1/notes ')
+  setup(){
+    let notes = ref('')
+    let length = ref('')
+    let title = ref('')
+    let content = ref('')
+
+    const getList = () => {
+      axios.get('http://localhost:3000/api/v1/notes ')
     .then( response => {
-      this.notes = response.data
-      this.length = this.notes.data.length
+      notes.value = response.data
+      length.value = notes.value.data.length
     })
     .catch((err) => {
-      this.notes = err
+      notes = err
     })
-  },
-    postNote(title, content){
+    }
+
+    const postNote = (title, content) => {
       axios.post('http://localhost:3000/api/v1/notes', {title: title, content: content, user_id:'1'})
       .then( response => {
         // 適切な変数に代入する。
         response.data
       })
       .catch((err) => {
-        this.notes = err
+        notes.value = err
       })
-  },
-    throwAway(noteId){
+
+    }
+
+    const throwAway = (noteId) => {
       axios.post('http://localhost:3000/api/v1/notes/trash', {id: noteId, user_id:'1'})
       .catch((err) => {
         this.err = err
       })
-    },
-
-  },
+    }
+    
+    return {
+      notes,
+      length,
+      title,
+      content,
+      getList,
+      postNote,
+      throwAway
+    }
+  }
 }
 </script>

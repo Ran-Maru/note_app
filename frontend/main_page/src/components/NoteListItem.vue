@@ -11,25 +11,30 @@
 
 <script>
 import axios from 'axios'
+import { ref }from 'vue'
+
 
 export default {
   name: 'NoteListItem',
   props: {
     note :Object
   },
-  data(){
-    return{
-      err:''
-  }
-  },
-  methods: {
-    throwAway(noteId){
+  setup(){
+    let err = ref('')
+
+    const throwAway = (noteId) => {
       axios.post('http://localhost:3000/api/v1/notes/trash', {id: noteId, user_id:'1'})
       .catch((err) => {
         this.err = err
       })
-    },
+    }
+    
+    return {
+      err,
+      throwAway
+    }
   },
+
   computed: {
     innerNote: {
       get(){
