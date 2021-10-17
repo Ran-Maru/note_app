@@ -1,7 +1,7 @@
 <template>
-    <button @click="getNoteList()">一覧取得</button>
-    <button @click="getLabelList()">ラベル一覧取得</button>
-  <MainMenu :labelList="labels"></MainMenu>
+  <button @click="getNoteList()">一覧取得</button>
+  <button @click="getLabelList()">ラベル一覧取得</button>
+  <MainMenu :labelList="labels"  @getNoteList="getNoteList"></MainMenu>
   <NoteList :noteList="notes"></NoteList>
 </template>
 
@@ -23,13 +23,17 @@ export default {
     let labels = ref('')
     let err = ref('')
     
-    const getNoteList = () => {
-      axios.get('http://localhost:3000/api/v1/notes ')
-    .then( response => {
-      notes.value = response.data
+    const getNoteList = (isTrash = false) => {
+      axios.get('http://localhost:3000/api/v1/notes', {
+        params: {
+          isTrash: isTrash 
+        }
+      })
+      .then( response => {
+        notes.value = response.data
     })
-    .catch((e) => {
-      err.value = e
+      .catch((e) => {
+        err.value = e
     })
     }
 

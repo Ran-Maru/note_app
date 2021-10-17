@@ -11,20 +11,27 @@
     <br>
     <button>アーカイブ</button>
     <br>
-    <button>ゴミ箱</button>
+    <button @click="getTrashList()">ゴミ箱</button>
   </div>
 </template>
 
 <script>
 export default {
   name: 'MainMenu',
-
   props: {
     labelList:{}
   },
+  emits: ['getNoteList'],
 
-  setup(){
+  setup(_, content){
 
+  const getTrashList = () => {
+    content.emit('getNoteList',true)
+  }
+
+    return{
+      getTrashList
+    }
   }
 }
 
