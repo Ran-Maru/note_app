@@ -1,7 +1,7 @@
 <template>
-    <button @click="getNoteList()">一覧取得(App_vue)</button>
-    <p>{{note}}</p>
-  <MainMenu></MainMenu>
+    <button @click="getNoteList()">一覧取得</button>
+    <button @click="getLabelList()">ラベル一覧取得</button>
+  <MainMenu :labelList="labels"></MainMenu>
   <NoteList :noteList="notes"></NoteList>
 </template>
 
@@ -20,7 +20,7 @@ export default {
   },
   setup(){
     let notes = ref('')
-    let test = ref('App.vueの値です')
+    let labels = ref('')
     let err = ref('')
     
     const getNoteList = () => {
@@ -33,10 +33,21 @@ export default {
     })
     }
 
+    const getLabelList = () => {
+      axios.get('http://localhost:3000/api/v1/labels')
+      .then( response => {
+        labels.value = response.data
+      })
+      .catch((e) => {
+        err.value = e
+      })
+    }
+
     return{
       getNoteList,
+      getLabelList,
       notes,
-      test
+      labels,
     }
   }
 }
