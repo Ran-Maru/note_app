@@ -7,7 +7,7 @@
         <button>{{labelList[n-1].name}}</button>
       </li>
     </ul>
-    <button>ラベルの編集</button>
+    <LabelEditDialog :labelList="labelList"></LabelEditDialog>
     <br>
     <button>アーカイブ</button>
     <br>
@@ -16,21 +16,27 @@
 </template>
 
 <script>
+import LabelEditDialog from './LabelEditDialog.vue'
+
 export default {
   name: 'MainMenu',
+  components: {
+    LabelEditDialog
+  },
+
   props: {
     labelList:{}
   },
+
   emits: ['getNoteList'],
 
   setup(_, content){
-
-  const getTrashList = () => {
-    content.emit('getNoteList',true)
-  }
+    const getTrashList = () => {
+      content.emit('getNoteList',true)
+    }
 
     return{
-      getTrashList
+      getTrashList,
     }
   }
 }
