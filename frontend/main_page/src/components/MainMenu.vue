@@ -1,6 +1,8 @@
 <template>
   <div>
     <br>
+    <button @click="getNoteList()">メモ</button>
+    <br>
     <button>リマインダー</button>
     <ul v-if="labelList">
       <li v-for="n of labelList.length" :key="n">
@@ -31,12 +33,17 @@ export default {
   emits: ['getNoteList'],
 
   setup(_, content){
+    const getNoteList = () => {
+      content.emit('getNoteList', false)
+    }
+
     const getTrashList = () => {
       content.emit('getNoteList',true)
     }
 
     return{
-      getTrashList,
+      getNoteList,
+      getTrashList
     }
   }
 }
