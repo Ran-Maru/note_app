@@ -4,7 +4,7 @@
     <button @click="getNoteList()">メモ</button>
     <br>
     <button>リマインダー</button>
-    <ul v-if="labelList">
+    <ul v-if="labelList" class="label-list">
       <li v-for="n of labelList.length" :key="n">
         <button>{{labelList[n-1].name}}</button>
       </li>
@@ -49,3 +49,12 @@ export default {
 }
 
 </script>
+
+<style scoped>
+.label-list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+</style>

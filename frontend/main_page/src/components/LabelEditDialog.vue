@@ -5,7 +5,7 @@
       <div id="content">
         <p>ラベルの編集</p>
         <input placeholder="新しいラベルを作成"><button>ラベルを作成</button>
-        <ul v-if="labelList" style="list-style: none;">
+        <ul v-if="labelList" class="label-list">
           <li v-for="n of labelList.length" :key="n">
             <button>削除</button>
             <input v-bind:value="labelList[n-1].name">
@@ -71,6 +71,12 @@ export default {
   width:50%;
   padding: 1em;
   background:#fff;
+}
+
+.label-list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 </style>
