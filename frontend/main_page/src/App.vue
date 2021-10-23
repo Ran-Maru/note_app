@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { ref }from 'vue'
+import { ref, onMounted }from 'vue'
 import axios from 'axios'
 
 import MainMenu from './components/MainMenu.vue'
@@ -46,6 +46,11 @@ export default {
         err.value = e
       })
     }
+
+    onMounted (()=> {
+      getNoteList()
+      getLabelList()
+    })
 
     return{
       getNoteList,

@@ -5,7 +5,7 @@
     内容
     <input type="text" v-model='content'>
     <button @click='postNote(title, content)'>メモ作成</button>
-      <ul v-if="noteList"> 
+      <ul v-if="noteList" class="note-list"> 
         <li v-for="n of noteList.data.length" :key="n">
           <NoteListItem v-bind:note="noteList.data[n-1]"></NoteListItem>
         </li>
@@ -61,3 +61,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.note-list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+</style>
