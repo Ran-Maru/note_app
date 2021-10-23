@@ -41,7 +41,8 @@ export default {
     }
 
     const deleteLabel = (label) => {
-      axios.delete('http://localhost:3000/api/v1/labels/' + label.id, {user_id:'1'})
+      const params = { user_id: '1'}
+      axios.delete('http://localhost:3000/api/v1/labels/' + label.id, {data: params})
       .catch((e) => {
         err.value = e
       })
