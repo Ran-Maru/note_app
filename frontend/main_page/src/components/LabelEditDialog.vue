@@ -7,7 +7,7 @@
         <input placeholder="新しいラベルを作成"><button>ラベルを作成</button>
         <ul v-if="labelList" class="label-list">
           <li v-for="n of labelList.length" :key="n">
-            <button>削除</button>
+            <button @click='deleteLabel(labelList[n-1])'>削除</button>
             <input v-bind:value="labelList[n-1].name">
             <button>更新</button>
           </li>
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { ref }from 'vue'
 
 export default {
@@ -29,6 +30,7 @@ export default {
 
   setup(){
     let showContent = ref(false)
+    let err = ref('')
 
     const openModal = () => {
       showContent.value = true
@@ -38,10 +40,18 @@ export default {
       showContent.value = false
     }
 
+    const deleteLabel = (label) => {
+      axios.delete('http://localhost:3000/api/v1/labels/' + label.id, {user_id:'1'})
+      .catch((e) => {
+        err.value = e
+      })
+    }
+
     return{
       showContent,
       openModal,
-      closeModal
+      closeModal,
+      deleteLabel
     }
   }
 }
