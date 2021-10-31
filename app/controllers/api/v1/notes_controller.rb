@@ -80,10 +80,14 @@ module Api
         isTrash = params[:isTrash]
         isTrash = false if isTrash.nil?
 
+        isArchived = params[:is_archived]
+        isArchived = false if isArchived.nil?
+
         # サーチparam用のハッシュを宣言
         @indexParams = {}
         @indexParams["user_id"] = 1
         @indexParams["isTrash"] = isTrash
+        @indexParams["is_archived"] = isArchived
         if params[:label_id].present?
           @indexParams["labelings.label_id"] = params[:label_id]
         end
