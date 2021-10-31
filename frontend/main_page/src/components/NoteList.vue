@@ -7,7 +7,10 @@
     <button @click='postNote(title, content)'>メモ作成</button>
       <ul v-if="noteList" class="note-list"> 
         <li v-for="n of noteList.data.length" :key="n">
-          <NoteListItem v-bind:note="noteList.data[n-1]"></NoteListItem>
+          <NoteListItem 
+            :note="noteList.data[n-1]" 
+            :labelList="labelList">
+          </NoteListItem>
         </li>
       </ul>
   </div>
@@ -25,9 +28,8 @@ export default {
   },
 
   props: {
-    noteList: {
-
-    }
+    noteList: {},
+    labelList:{}
   },
   setup(props){
     let title = ref('')
