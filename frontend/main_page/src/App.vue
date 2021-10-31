@@ -23,11 +23,9 @@ export default {
     let labels = ref('')
     let err = ref('')
     
-    const getNoteList = (isTrash = false) => {
+    const getNoteList = (params) => {
       axios.get('http://localhost:3000/api/v1/notes', {
-        params: {
-          isTrash: isTrash 
-        }
+        params
       })
       .then( response => {
         notes.value = response.data
