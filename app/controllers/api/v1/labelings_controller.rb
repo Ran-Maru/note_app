@@ -36,7 +36,7 @@ module Api
 
       # 更新対象が存在するか確認
       def pre_check
-        @labeling = Labeling.find_by(id: params[:id])
+        @labeling = Labeling.find_by(note_id: params[:note_id], label_id: params[:label_id])
         response = { status: 'ERROR', message: 'Resource Not Found' }
         pretty_json response if @labeling.nil?
       end
