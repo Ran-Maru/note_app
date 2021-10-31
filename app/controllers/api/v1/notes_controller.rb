@@ -1,14 +1,14 @@
 module Api
   module V1
     class NotesController < ApplicationController
-      before_action :pre_check, only: [:update, :throwAway, :destroy]
+      before_action :pre_check, only: [:update, :throwAway, :archive, :unarchive, :destroy]
       before_action :pre_index_check, only: [:index]
 
       # FIXME: Can't verify CSRF token authenticity.
       protect_from_forgery
 
       def index
-        note = Note.select("notes.*").eager_load(:labels).order(updated_at: "DESC").where(user_id: 1, isTrash: @isTrash)
+        note = Note.select("notes.*").eager_load(:labels).order(updated_at: "DESC").where(@indexParams)
         # ラベル情報をネストしたnoteのjsonを取得し、配列型に変換する。
         note_data = JSON.parse(note.to_json(include: [{labels: {only: [:id, :name] }}]))
         response = { status: 'SUCCESS', data: note_data}
@@ -38,6 +38,24 @@ module Api
       # メモを削除（ゴミ箱に移動）
       def throwAway
         if @note.update(isTrash: true)
+          response = { status: 'SUCCESS', data: @note }
+        else
+          response = { status: 'ERROR', data: @note.errors }
+        end
+        pretty_json response
+      end
+
+      def archive
+        if @note.update(is_archived: true)
+          response = { status: 'SUCCESS', data: @note }
+        else
+          response = { status: 'ERROR', data: @note.errors }
+        end
+        pretty_json response
+      end
+
+      def unarchive
+        if @note.update(is_archived: false)
           response = { status: 'SUCCESS', data: @note }
         else
           response = { status: 'ERROR', data: @note.errors }
@@ -77,8 +95,20 @@ module Api
 
       def pre_index_check
         # APIの引数で指定がなければ、isTrash = falseで一覧取得をおこなう。
-        @isTrash = params[:isTrash]
-        @isTrash = false if @isTrash.nil?
+        isTrash = params[:isTrash]
+        isTrash = false if isTrash.nil?
+
+        isArchived = params[:is_archived]
+        isArchived = false if isArchived.nil?
+
+        # サーチparam用のハッシュを宣言
+        @indexParams = {}
+        @indexParams["user_id"] = 1
+        @indexParams["isTrash"] = isTrash
+        @indexParams["is_archived"] = isArchived
+        if params[:label_id].present?
+          @indexParams["labelings.label_id"] = params[:label_id]
+        end
       end
     end
   end

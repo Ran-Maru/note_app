@@ -11,6 +11,8 @@ Rails.application.routes.draw do
         collection do
           # メモを削除（ゴミ箱に移動）
           post '/trash', to: 'notes#throwAway'
+          post '/archive', to: 'notes#archive'
+          post '/unarchive', to: 'notes#unarchive'
           get 'search'
         end
       end
