@@ -34,11 +34,12 @@ export default {
 
   setup(_, content){
     const getNoteList = () => {
-      content.emit('getNoteList', false)
+      content.emit('getNoteList')
     }
 
     const getTrashList = () => {
-      content.emit('getNoteList',true)
+      const params = {"isTrash": true}
+      content.emit('getNoteList', params)
     }
 
     return{
