@@ -4,7 +4,8 @@
     <div id="overlay" v-show="showContent">
       <div id="content">
         <p>ラベルの編集</p>
-        <input placeholder="新しいラベルを作成"><button>ラベルを作成</button>
+        <input placeholder="新しいラベルを作成" id="labelForm">
+        <button @click="createLabel(labelList)">ラベルを作成</button>
         <ul v-if="labelList" class="label-list">
           <li v-for="n of labelList.length" :key="n">
             <button @click='deleteLabel(labelList[n-1])'>削除</button>
@@ -39,6 +40,26 @@ export default {
   
     const closeModal = () => {
       showContent.value = false
+    }
+
+    const createLabel = (labelList) => {
+      const inputValue = document.getElementById("labelForm").value
+
+      if (!inputValue) {
+        return
+      }
+      
+      for (let label of labelList){
+        if (inputValue === label.name){
+          alert('同名のラベルが既に存在するため、作成できません。')
+          return
+        }
+      }
+      
+      axios.post('http://localhost:3000/api/v1/labels/', {name: inputValue, user_id: '1'})
+      .catch((e) => {
+        err.value = e
+      })
     }
 
     const deleteLabel = (label) => {
@@ -79,6 +100,7 @@ export default {
       showContent,
       openModal,
       closeModal,
+      createLabel,
       deleteLabel,
       renameLabel
     }

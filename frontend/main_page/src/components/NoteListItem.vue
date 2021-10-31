@@ -60,8 +60,11 @@ export default {
       })
     }
     
-    const $_checkOff = () => {
-      // TODO: 紐付け解除処理を実装する。
+    const $_checkOff = (note, label) => {
+      axios.post('http://localhost:3000/api/v1/labelings/destroy', {note_id: note.id, label_id: label.id})
+      .catch((err) => {
+        this.err = err
+      })
     }
 
     // TODO: データ表示時にチェックボックス状態亜を設定する関数を実装する。
