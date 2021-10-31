@@ -2,7 +2,7 @@
   <button @click="getNoteList()">一覧取得</button>
   <button @click="getLabelList()">ラベル一覧取得</button>
   <MainMenu :labelList="labels"  @getNoteList="getNoteList"></MainMenu>
-  <NoteList :noteList="notes"></NoteList>
+  <NoteList :noteList="notes" :labelList="labels"></NoteList>
 </template>
 
 <script>
