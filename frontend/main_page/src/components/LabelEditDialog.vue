@@ -8,8 +8,9 @@
         <ul v-if="labelList" class="label-list">
           <li v-for="n of labelList.length" :key="n">
             <button @click='deleteLabel(labelList[n-1])'>削除</button>
-            <input v-bind:value="labelList[n-1].name">
-            <button>更新</button>
+            <input type="text" :value="innerLabel[n-1].name" :id="'inputValue'+ String(n-1)">
+            <button @click='renameLabel(labelList, n-1)'>更新</button>
+            <p>{{ labelList[n-1 ]}}</p>
           </li>
         </ul>
         <button @click="closeModal">閉じる</button>
@@ -20,7 +21,7 @@
 
 <script>
 import axios from 'axios'
-import { ref }from 'vue'
+import { ref } from 'vue'
 
 export default {
   name: 'LabelEditDialog',
@@ -41,9 +42,36 @@ export default {
     }
 
     const deleteLabel = (label) => {
-      axios.delete('http://localhost:3000/api/v1/labels/' + label.id, {user_id:'1'})
+      const params = { user_id: '1'}
+      axios.delete('http://localhost:3000/api/v1/labels/' + label.id, {data: params})
       .catch((e) => {
         err.value = e
+      })
+    }
+
+    const renameLabel = (labelList, nth) => { 
+      // 処理対象input要素のvalueを取得する。
+      const inputValue = 
+        document.getElementById("inputValue" + String(nth)).value
+      const oldValue = labelList[nth].name
+      
+      if (inputValue === oldValue) {
+        return
+      }
+
+      for (let label of labelList){
+        if (inputValue === label.name){
+          alert('同名のラベルが既に存在するため、更新できません。')
+          return
+        }
+      }
+      
+      const labelId = labelList[nth].id
+      
+      axios.patch('http://localhost:3000/api/v1/labels/' + labelId,
+        {name:inputValue, user_id:'1'})
+      .catch((err) => {
+        this.err.value = err
       })
     }
 
@@ -51,7 +79,16 @@ export default {
       showContent,
       openModal,
       closeModal,
-      deleteLabel
+      deleteLabel,
+      renameLabel
+    }
+  },
+
+  computed: {
+    innerLabel: {
+      get(){
+        return this.$props.labelList
+      },
     }
   }
 }
