@@ -18,7 +18,7 @@
 
 <script>
 import axios from 'axios'
-import { ref }from 'vue'
+import { ref, onUpdated }from 'vue'
 
 export default {
   name: 'NoteListItem',
@@ -26,8 +26,25 @@ export default {
     note :Object,
     labelList:{}
   },
-  setup(){
+  setup(props){
     let err = ref('')
+
+    const initCheckmark = () => {
+      const note = props.note
+      const labelList = props.labelList
+      
+      //すべてのチェックボックスのチェックを外す。
+      for(const label of labelList) {
+        const box = document.getElementById("label" + note.id +  label.id)
+        box.checked  = false
+      }
+      
+      // 該当のチェックボックスにチェックを入れる。
+      for(const attachedLabel of note.labels) {
+        const box = document.getElementById("label" + note.id + attachedLabel.id)
+        box.checked  = true
+      }
+    }
 
     const update = (note) => {
       axios.patch('http://localhost:3000/api/v1/notes/' + note.id,
@@ -67,10 +84,13 @@ export default {
       })
     }
 
-    // TODO: データ表示時にチェックボックス状態亜を設定する関数を実装する。
+    onUpdated(() => {
+      initCheckmark()
+    })
 
     return {
       err,
+      initCheckmark,
       update,
       throwAway,
       checkBox
