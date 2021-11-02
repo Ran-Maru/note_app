@@ -20,6 +20,7 @@
 import axios from 'axios'
 import NoteListItem from './NoteListItem.vue'
 import { ref }from 'vue'
+import { API } from '../const'
 
 export default {
   name: 'NoteList',
@@ -36,7 +37,7 @@ export default {
     let content = ref('')
 
     const postNote = (title, content) => {
-      axios.post('http://localhost:3000/api/v1/notes', {title: title, content: content, user_id:'1'})
+      axios.post(API.NOTES, {title: title, content: content, user_id:'1'})
       .then( response => {
         // 適切な変数に代入する。
         response.data
@@ -47,7 +48,7 @@ export default {
     }
 
     const throwAway = (noteId) => {
-      axios.post('http://localhost:3000/api/v1/notes/trash', {id: noteId, user_id:'1'})
+      axios.post(API.NOTES_TRASH, {id: noteId, user_id:'1'})
       .catch((e) => {
         this.err = e
       })

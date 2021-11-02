@@ -19,6 +19,7 @@
 <script>
 import axios from 'axios'
 import { ref, onUpdated }from 'vue'
+import { API } from '../const'
 
 export default {
   name: 'NoteListItem',
@@ -47,7 +48,7 @@ export default {
     }
 
     const update = (note) => {
-      axios.patch('http://localhost:3000/api/v1/notes/' + note.id,
+      axios.patch(API.NOTES + note.id,
       {title: note.title, content: note.content, user_id:'1'})
       .catch((err) => {
         this.err.value = err
@@ -55,7 +56,7 @@ export default {
     }
 
     const throwAway = (noteId) => {
-      axios.post('http://localhost:3000/api/v1/notes/trash', {id: noteId, user_id:'1'})
+      axios.post(API.NOTES_TRASH, {id: noteId, user_id:'1'})
       .catch((err) => {
         this.err = err
       })
@@ -71,14 +72,14 @@ export default {
     }
 
     const $_checkOn = (note, label) => {
-      axios.post('http://localhost:3000/api/v1/labelings', {note_id: note.id, label_id: label.id})
+      axios.post(API.LABELINGS, {note_id: note.id, label_id: label.id})
       .catch((err) => {
         this.err = err
       })
     }
     
     const $_checkOff = (note, label) => {
-      axios.post('http://localhost:3000/api/v1/labelings/destroy', {note_id: note.id, label_id: label.id})
+      axios.post(API.LABELINGS_DESTROY, {note_id: note.id, label_id: label.id})
       .catch((err) => {
         this.err = err
       })

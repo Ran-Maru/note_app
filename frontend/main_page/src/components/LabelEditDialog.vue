@@ -23,6 +23,7 @@
 <script>
 import axios from 'axios'
 import { ref } from 'vue'
+import { API } from '../const'
 
 export default {
   name: 'LabelEditDialog',
@@ -56,7 +57,7 @@ export default {
         }
       }
       
-      axios.post('http://localhost:3000/api/v1/labels/', {name: inputValue, user_id: '1'})
+      axios.post(API.LABELS, {name: inputValue, user_id: '1'})
       .catch((e) => {
         err.value = e
       })
@@ -64,7 +65,7 @@ export default {
 
     const deleteLabel = (label) => {
       const params = { user_id: '1'}
-      axios.delete('http://localhost:3000/api/v1/labels/' + label.id, {data: params})
+      axios.delete(API.LABELS + label.id, {data: params})
       .catch((e) => {
         err.value = e
       })
@@ -89,7 +90,7 @@ export default {
       
       const labelId = labelList[nth].id
       
-      axios.patch('http://localhost:3000/api/v1/labels/' + labelId,
+      axios.patch(API.LABELS + labelId,
         {name:inputValue, user_id:'1'})
       .catch((err) => {
         this.err.value = err
