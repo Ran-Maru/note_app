@@ -3,8 +3,8 @@
     <p>{{note}}</p>
     <p>タイトルと本文</p>
     <input type="checkbox">
-    <input type="text" v-model="innerNote['title']">
-    <input type="text" v-model="innerNote['content']">
+    <input type="text" v-model="propsNote['title']">
+    <input type="text" v-model="propsNote['content']">
     <button @click='update(note)'>更新</button>
     <button @click='throwAway(note.id)'>削除</button>
       <ul v-if="labelList" class="label-list">
@@ -18,7 +18,8 @@
 
 <script>
 import axios from 'axios'
-import { ref }from 'vue'
+import { ref, computed, onUpdated } from 'vue'
+import { API } from '../const'
 
 export default {
   name: 'NoteListItem',
@@ -26,11 +27,29 @@ export default {
     note :Object,
     labelList:{}
   },
-  setup(){
+  setup(props){
     let err = ref('')
+    const propsNote = computed(() => props.note ).value
+
+    const initCheckmark = () => {
+      const note = props.note
+      const labelList = props.labelList
+      
+      //すべてのチェックボックスのチェックを外す。
+      for(const label of labelList) {
+        const box = document.getElementById("label" + note.id +  label.id)
+        box.checked  = false
+      }
+      
+      // 該当のチェックボックスにチェックを入れる。
+      for(const attachedLabel of note.labels) {
+        const box = document.getElementById("label" + note.id + attachedLabel.id)
+        box.checked  = true
+      }
+    }
 
     const update = (note) => {
-      axios.patch('http://localhost:3000/api/v1/notes/' + note.id,
+      axios.patch(API.NOTES + note.id,
       {title: note.title, content: note.content, user_id:'1'})
       .catch((err) => {
         this.err.value = err
@@ -38,7 +57,7 @@ export default {
     }
 
     const throwAway = (noteId) => {
-      axios.post('http://localhost:3000/api/v1/notes/trash', {id: noteId, user_id:'1'})
+      axios.post(API.NOTES_TRASH, {id: noteId, user_id:'1'})
       .catch((err) => {
         this.err = err
       })
@@ -54,36 +73,32 @@ export default {
     }
 
     const $_checkOn = (note, label) => {
-      axios.post('http://localhost:3000/api/v1/labelings', {note_id: note.id, label_id: label.id})
+      axios.post(API.LABELINGS, {note_id: note.id, label_id: label.id})
       .catch((err) => {
         this.err = err
       })
     }
     
     const $_checkOff = (note, label) => {
-      axios.post('http://localhost:3000/api/v1/labelings/destroy', {note_id: note.id, label_id: label.id})
+      axios.post(API.LABELINGS_DESTROY, {note_id: note.id, label_id: label.id})
       .catch((err) => {
         this.err = err
       })
     }
 
-    // TODO: データ表示時にチェックボックス状態亜を設定する関数を実装する。
+    onUpdated(() => {
+      initCheckmark()
+    })
 
     return {
       err,
+      propsNote,
+      initCheckmark,
       update,
       throwAway,
       checkBox
     }
   },
-
-  computed: {
-    innerNote: {
-      get(){
-        return this.$props.note
-      },
-    }
-  }
 }
 </script>
 

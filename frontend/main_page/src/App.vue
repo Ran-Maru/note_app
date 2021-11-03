@@ -8,7 +8,7 @@
 <script>
 import { ref, onMounted }from 'vue'
 import axios from 'axios'
-
+import { API } from './const'
 import MainMenu from './components/MainMenu.vue'
 import NoteList from './components/NoteList.vue'
 
@@ -24,7 +24,7 @@ export default {
     let err = ref('')
     
     const getNoteList = (params) => {
-      axios.get('http://localhost:3000/api/v1/notes', {
+      axios.get(API.NOTES, {
         params
       })
       .then( response => {
@@ -36,7 +36,7 @@ export default {
     }
 
     const getLabelList = () => {
-      axios.get('http://localhost:3000/api/v1/labels')
+      axios.get(API.LABELS)
       .then( response => {
         labels.value = response.data
       })

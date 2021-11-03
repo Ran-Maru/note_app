@@ -9,7 +9,7 @@
         <ul v-if="labelList" class="label-list">
           <li v-for="n of labelList.length" :key="n">
             <button @click='deleteLabel(labelList[n-1])'>削除</button>
-            <input type="text" :value="innerLabel[n-1].name" :id="'inputValue'+ String(n-1)">
+            <input type="text" :value="propsLabels[n-1].name" :id="'inputValue'+ String(n-1)">
             <button @click='renameLabel(labelList, n-1)'>更新</button>
             <p>{{ labelList[n-1 ]}}</p>
           </li>
@@ -22,7 +22,8 @@
 
 <script>
 import axios from 'axios'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { API } from '../const'
 
 export default {
   name: 'LabelEditDialog',
@@ -30,9 +31,10 @@ export default {
     labelList:{}
   },
 
-  setup(){
+  setup(props){
     let showContent = ref(false)
     let err = ref('')
+    const propsLabels = computed(() => props.labelList )
 
     const openModal = () => {
       showContent.value = true
@@ -56,7 +58,7 @@ export default {
         }
       }
       
-      axios.post('http://localhost:3000/api/v1/labels/', {name: inputValue, user_id: '1'})
+      axios.post(API.LABELS, {name: inputValue, user_id: '1'})
       .catch((e) => {
         err.value = e
       })
@@ -64,7 +66,7 @@ export default {
 
     const deleteLabel = (label) => {
       const params = { user_id: '1'}
-      axios.delete('http://localhost:3000/api/v1/labels/' + label.id, {data: params})
+      axios.delete(API.LABELS + label.id, {data: params})
       .catch((e) => {
         err.value = e
       })
@@ -89,7 +91,7 @@ export default {
       
       const labelId = labelList[nth].id
       
-      axios.patch('http://localhost:3000/api/v1/labels/' + labelId,
+      axios.patch(API.LABELS + labelId,
         {name:inputValue, user_id:'1'})
       .catch((err) => {
         this.err.value = err
@@ -97,20 +99,13 @@ export default {
     }
 
     return{
+      propsLabels,
       showContent,
       openModal,
       closeModal,
       createLabel,
       deleteLabel,
       renameLabel
-    }
-  },
-
-  computed: {
-    innerLabel: {
-      get(){
-        return this.$props.labelList
-      },
     }
   }
 }
