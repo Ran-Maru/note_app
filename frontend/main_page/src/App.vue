@@ -1,12 +1,16 @@
 <template>
   <button @click="getNoteList()">一覧取得</button>
   <button @click="getLabelList()">ラベル一覧取得</button>
-  <MainMenu :labelList="labels"  @getNoteList="getNoteList"></MainMenu>
+  <MainMenu 
+    :labelList="labels"  
+    @getNoteList="getNoteList"
+    @setLabels="setLabels"
+    ></MainMenu>
   <NoteList :noteList="notes" :labelList="labels"></NoteList>
 </template>
 
 <script>
-import { ref, onMounted }from 'vue'
+import { ref, onMounted, provide }from 'vue'
 import axios from 'axios'
 import { API } from './const'
 import MainMenu from './components/MainMenu.vue'
@@ -45,6 +49,12 @@ export default {
       })
     }
 
+    const setLabels = (param) => {
+      labels.value = param
+    }
+
+    provide('setLabels', setLabels)
+
     onMounted (()=> {
       getNoteList()
       getLabelList()
@@ -53,6 +63,7 @@ export default {
     return{
       getNoteList,
       getLabelList,
+      setLabels,
       notes,
       labels,
     }

@@ -44,7 +44,9 @@ export default {
       // 該当のチェックボックスにチェックを入れる。
       for(const attachedLabel of note.labels) {
         const box = document.getElementById("label" + note.id + attachedLabel.id)
-        box.checked  = true
+        if (box){
+          box.checked  = true
+        }
       }
     }
 
