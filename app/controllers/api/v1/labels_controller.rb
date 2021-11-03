@@ -14,9 +14,11 @@ module Api
       def create
         label = Label.new(label_params)
         if label.save
-          response = { status: 'SUCCESS', data: label }
+          labels = Label.where(user_id: 1)
+          response = { status: 'SUCCESS', data: labels }
         else
-          response = { status: 'ERROR', data: label.errors }
+          labels = Label.where(user_id: 1)
+          response = { status: 'ERROR', message: label.errors, data: labels }
         end
         pretty_json response
       end
@@ -24,15 +26,24 @@ module Api
       # SQLが一行になるか検証
       def update
         if @label.update(label_params)
-          response = { status: 'SUCCESS', data: @label }
+          labels = Label.where(user_id: 1)
+          response = { status: 'SUCCESS', data: labels }
         else
-          response = { status: 'ERROR', data: @label.errors }
+          labels = Label.where(user_id: 1)
+          response = { status: 'ERROR', message: @label.errors, data: labels }
         end
         pretty_json response
       end
 
       def destroy
-        @label.destroy
+        if @label.destroy
+          labels = Label.where(user_id: 1)
+          response = { status: 'SUCCESS', data: labels }
+        else
+          labels = Label.where(user_id: 1)
+          response = { status: 'ERROR', message: @label.errors, data: labels }
+        end
+        pretty_json response
       end
 
       private
@@ -46,7 +57,8 @@ module Api
       # 更新対象が存在するか確認
       def pre_check
         @label = Label.find_by(id: params[:id], user_id: params[:user_id])
-        response = { status: 'ERROR', message: 'Resource Not Found' }
+        labels = Label.where(user_id: 1)
+        response = { status: 'ERROR', message: 'Resource Not Found', data: labels }
         pretty_json response if @label.nil?
       end
     end
