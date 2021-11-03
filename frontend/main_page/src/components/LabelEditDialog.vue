@@ -9,7 +9,7 @@
         <ul v-if="labelList" class="label-list">
           <li v-for="n of labelList.length" :key="n">
             <button @click='deleteLabel(labelList[n-1])'>削除</button>
-            <input type="text" :value="innerLabel[n-1].name" :id="'inputValue'+ String(n-1)">
+            <input type="text" :value="propsLabels[n-1].name" :id="'inputValue'+ String(n-1)">
             <button @click='renameLabel(labelList, n-1)'>更新</button>
             <p>{{ labelList[n-1 ]}}</p>
           </li>
@@ -22,7 +22,7 @@
 
 <script>
 import axios from 'axios'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { API } from '../const'
 
 export default {
@@ -31,9 +31,10 @@ export default {
     labelList:{}
   },
 
-  setup(){
+  setup(props){
     let showContent = ref(false)
     let err = ref('')
+    const propsLabels = computed(() => props.labelList )
 
     const openModal = () => {
       showContent.value = true
@@ -98,20 +99,13 @@ export default {
     }
 
     return{
+      propsLabels,
       showContent,
       openModal,
       closeModal,
       createLabel,
       deleteLabel,
       renameLabel
-    }
-  },
-
-  computed: {
-    innerLabel: {
-      get(){
-        return this.$props.labelList
-      },
     }
   }
 }
