@@ -3,8 +3,8 @@
     <p>{{note}}</p>
     <p>タイトルと本文</p>
     <input type="checkbox">
-    <input type="text" v-model="innerNote['title']">
-    <input type="text" v-model="innerNote['content']">
+    <input type="text" v-model="propsNote['title']">
+    <input type="text" v-model="propsNote['content']">
     <button @click='update(note)'>更新</button>
     <button @click='throwAway(note.id)'>削除</button>
       <ul v-if="labelList" class="label-list">
@@ -18,7 +18,7 @@
 
 <script>
 import axios from 'axios'
-import { ref, onUpdated }from 'vue'
+import { ref, computed, onUpdated } from 'vue'
 import { API } from '../const'
 
 export default {
@@ -29,6 +29,7 @@ export default {
   },
   setup(props){
     let err = ref('')
+    const propsNote = computed(() => props.note ).value
 
     const initCheckmark = () => {
       const note = props.note
@@ -91,20 +92,13 @@ export default {
 
     return {
       err,
+      propsNote,
       initCheckmark,
       update,
       throwAway,
       checkBox
     }
   },
-
-  computed: {
-    innerNote: {
-      get(){
-        return this.$props.note
-      },
-    }
-  }
 }
 </script>
 
