@@ -6,12 +6,14 @@
     <button>リマインダー</button>
     <ul v-if="labelList" class="label-list">
       <li v-for="n of labelList.length" :key="n">
-        <button>{{labelList[n-1].name}}</button>
+        <button @click="getLabeledNoteList(labelList[n-1].id)">
+          {{labelList[n-1].name}}
+        </button>
       </li>
     </ul>
     <LabelEditDialog :labelList="labelList"></LabelEditDialog>
     <br>
-    <button>アーカイブ</button>
+    <button @click="getArchivedList()">アーカイブ</button>
     <br>
     <button @click="getTrashList()">ゴミ箱</button>
   </div>
@@ -34,15 +36,28 @@ export default {
 
   setup(_, content){
     const getNoteList = () => {
-      content.emit('getNoteList', false)
+      content.emit('getNoteList')
+    }
+
+    const getLabeledNoteList = (labelId) => {
+      const params = {"label_id": labelId}
+      content.emit('getNoteList', params)
+    }
+
+    const getArchivedList = () => {
+      const params = {"is_archived": true}
+      content.emit('getNoteList', params)
     }
 
     const getTrashList = () => {
-      content.emit('getNoteList',true)
+      const params = {"isTrash": true}
+      content.emit('getNoteList', params)
     }
 
     return{
       getNoteList,
+      getLabeledNoteList,
+      getArchivedList,
       getTrashList
     }
   }
