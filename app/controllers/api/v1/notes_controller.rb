@@ -68,6 +68,12 @@ module Api
         @note.destroy
       end
 
+      def emptyTrash
+        Note.where(user_id: params[:user_id], isTrash: 1).destroy_all
+        response = { status: 'SUCCESS', data: '' }
+        pretty_json response
+      end
+
       # メモを検索
       def search
       end
