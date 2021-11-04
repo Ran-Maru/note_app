@@ -37,7 +37,7 @@ module Api
 
       # メモを削除（ゴミ箱に移動）
       def throwAway
-        if @note.update(isTrash: true)
+        if @note.update(is_trash: true)
           response = { status: 'SUCCESS', data: @note }
         else
           response = { status: 'ERROR', data: @note.errors }
@@ -69,7 +69,7 @@ module Api
       end
 
       def emptyTrash
-        Note.where(user_id: params[:user_id], isTrash: 1).destroy_all
+        Note.where(user_id: params[:user_id], is_trash: 1).destroy_all
         response = { status: 'SUCCESS', data: '' }
         pretty_json response
       end
@@ -100,9 +100,9 @@ module Api
       end
 
       def pre_index_check
-        # APIの引数で指定がなければ、isTrash = falseで一覧取得をおこなう。
-        isTrash = params[:isTrash]
-        isTrash = false if isTrash.nil?
+        # APIの引数で指定がなければ、is_trash = falseで一覧取得をおこなう。
+        is_trash = params[:is_trash]
+        is_trash = false if is_trash.nil?
 
         isArchived = params[:is_archived]
         isArchived = false if isArchived.nil?
@@ -110,7 +110,7 @@ module Api
         # サーチparam用のハッシュを宣言
         @indexParams = {}
         @indexParams["user_id"] = 1
-        @indexParams["isTrash"] = isTrash
+        @indexParams["is_trash"] = is_trash
         @indexParams["is_archived"] = isArchived
         if params[:label_id].present?
           @indexParams["labelings.label_id"] = params[:label_id]
