@@ -50,7 +50,7 @@ export default {
     }
 
     const getTrashList = () => {
-      const params = {"isTrash": true}
+      const params = {"is_trash": true}
       content.emit('getNoteList', params)
     }
 
