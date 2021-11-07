@@ -22,7 +22,7 @@
 
 <script>
 import axios from 'axios'
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { API } from '../const'
 
 export default {
@@ -44,9 +44,10 @@ export default {
       showContent.value = false
     }
 
+    const setLabels = inject('setLabels')
+
     const createLabel = (labelList) => {
       const inputValue = document.getElementById("labelForm").value
-
       if (!inputValue) {
         return
       }
@@ -59,6 +60,9 @@ export default {
       }
       
       axios.post(API.LABELS, {name: inputValue, user_id: '1'})
+      .then( response => {
+        setLabels(response.data.data)
+      })
       .catch((e) => {
         err.value = e
       })
@@ -67,6 +71,9 @@ export default {
     const deleteLabel = (label) => {
       const params = { user_id: '1'}
       axios.delete(API.LABELS + label.id, {data: params})
+      .then( response => {
+        setLabels(response.data.data)
+      })
       .catch((e) => {
         err.value = e
       })
@@ -93,6 +100,9 @@ export default {
       
       axios.patch(API.LABELS + labelId,
         {name:inputValue, user_id:'1'})
+      .then( response => {
+        setLabels(response.data.data)
+      })
       .catch((err) => {
         this.err.value = err
       })
