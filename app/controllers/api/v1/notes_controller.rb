@@ -46,6 +46,17 @@ module Api
         pretty_json response
       end
 
+      # ゴミ箱から復元する。
+      def restoreNote
+        # ','区切りで受け取ったidを型変換
+        id_params_arr = params[:id].split(',')
+        data = Note.where(user_id: params[:user_id])
+                    .merge(Note.where(id: id_params_arr))
+                    .update_all(is_trash: false)
+        response = { status: 'SUCCESS', data: data }
+        pretty_json response
+      end
+
       def archive
         if @note.update(is_archived: true)
           response = { status: 'SUCCESS', data: @note }
