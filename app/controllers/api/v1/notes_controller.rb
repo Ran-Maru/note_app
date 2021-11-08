@@ -1,7 +1,7 @@
 module Api
   module V1
     class NotesController < ApplicationController
-      before_action :pre_check, only: [:update, :throwAway, :archive, :unarchive, :destroy]
+      before_action :pre_check, only: [:update, :throwAway, :archive, :unarchive]
       before_action :pre_index_check, only: [:index]
 
       # FIXME: Can't verify CSRF token authenticity.
@@ -65,7 +65,11 @@ module Api
 
       # メモを完全に削除（ゴミ箱から削除）
       def destroy
-        @note.destroy
+        # ','区切りで受け取ったidを型変換
+        id_params_arr = params[:id].split(',')
+        data = Note.where(user_id: params[:user_id]).merge(Note.where(id: id_params_arr)).destroy_all
+        response = { status: 'SUCCESS', data: data }
+        pretty_json response
       end
 
       def emptyTrash
