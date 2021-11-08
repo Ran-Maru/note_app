@@ -1,7 +1,7 @@
 module Api
   module V1
     class NotesController < ApplicationController
-      before_action :pre_check, only: [:update, :throwAway, :archive, :unarchive]
+      before_action :pre_check, only: [:update, :archive, :unarchive]
       before_action :pre_index_check, only: [:index]
 
       # FIXME: Can't verify CSRF token authenticity.
@@ -37,11 +37,12 @@ module Api
 
       # メモを削除（ゴミ箱に移動）
       def throwAway
-        if @note.update(is_trash: true)
-          response = { status: 'SUCCESS', data: @note }
-        else
-          response = { status: 'ERROR', data: @note.errors }
-        end
+        # ','区切りで受け取ったidを型変換
+        id_params_arr = params[:id].split(',')
+        data = Note.where(user_id: params[:user_id])
+                    .merge(Note.where(id: id_params_arr))
+                    .update_all(is_trash: true)
+        response = { status: 'SUCCESS', data: data }
         pretty_json response
       end
 
