@@ -4,7 +4,7 @@
     <p>タイトルと本文</p>
     <input type="checkbox">
     <input type="text" v-model="propsNote['title']">
-    <input type="text" v-model="propsNote['content']">
+    <textarea v-model="propsNote['content']"></textarea>
     <button @click='update(note)'>更新</button>
     <button @click='throwAway(note.id)'>削除</button>
       <ul v-if="labelList" class="label-list">

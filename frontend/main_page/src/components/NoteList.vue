@@ -3,7 +3,7 @@
     タイトル
     <input type="text" v-model='title'>
     内容
-    <input type="text" v-model='content'>
+    <textarea v-model='content'></textarea>
     <button @click='postNote(title, content)'>メモ作成</button>
       <ul v-if="noteList" class="note-list"> 
         <li v-for="n of noteList.data.length" :key="n">
