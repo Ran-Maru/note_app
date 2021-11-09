@@ -1,7 +1,7 @@
 module Api
   module V1
     class NotesController < ApplicationController
-      before_action :pre_check, only: [:update, :archive, :unarchive]
+      before_action :pre_check, only: [:update]
       before_action :pre_index_check, only: [:index]
 
       # FIXME: Can't verify CSRF token authenticity.
@@ -48,7 +48,6 @@ module Api
 
       # ゴミ箱から復元する。
       def restoreNote
-        # ','区切りで受け取ったidを型変換
         id_params_arr = params[:id].split(',')
         data = Note.where(user_id: params[:user_id])
                     .merge(Note.where(id: id_params_arr))
@@ -58,26 +57,25 @@ module Api
       end
 
       def archive
-        if @note.update(is_archived: true)
-          response = { status: 'SUCCESS', data: @note }
-        else
-          response = { status: 'ERROR', data: @note.errors }
-        end
+        id_params_arr = params[:id].split(',')
+        data = Note.where(user_id: params[:user_id])
+                    .merge(Note.where(id: id_params_arr))
+                    .update_all(is_archived: true)
+        response = { status: 'SUCCESS', data: data }
         pretty_json response
       end
 
       def unarchive
-        if @note.update(is_archived: false)
-          response = { status: 'SUCCESS', data: @note }
-        else
-          response = { status: 'ERROR', data: @note.errors }
-        end
+        id_params_arr = params[:id].split(',')
+        data = Note.where(user_id: params[:user_id])
+                    .merge(Note.where(id: id_params_arr))
+                    .update_all(is_archived: false)
+        response = { status: 'SUCCESS', data: data }
         pretty_json response
       end
 
       # メモを完全に削除（ゴミ箱から削除）
       def destroy
-        # ','区切りで受け取ったidを型変換
         id_params_arr = params[:id].split(',')
         data = Note.where(user_id: params[:user_id]).merge(Note.where(id: id_params_arr)).destroy_all
         response = { status: 'SUCCESS', data: data }
