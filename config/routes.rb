@@ -7,11 +7,14 @@ Rails.application.routes.draw do
   # APIを定義
   namespace :api, format: 'json' do
     namespace :v1 do
-      resources :notes, only: [:index, :create, :update, :destroy] do
+      resources :notes, only: [:index, :create, :update] do
         collection do
           # メモを削除（ゴミ箱に移動）
           post '/trash', to: 'notes#throwAway'
+          post '/trash/restore', to: 'notes#restoreNote'
+          # メモを完全削除
           delete '/trash/empty', to: 'notes#emptyTrash'
+          delete '/destroy', to: 'notes#destroy'
           post '/archive', to: 'notes#archive'
           post '/unarchive', to: 'notes#unarchive'
           get 'search'
