@@ -17,7 +17,7 @@ Rails.application.routes.draw do
           delete '/destroy', to: 'notes#destroy'
           post '/archive', to: 'notes#archive'
           post '/unarchive', to: 'notes#unarchive'
-          get 'search'
+          post 'search'
         end
       end
       # FIXME: labelのURLを/user/:user_id/labelsの形に変更する。
