@@ -1,8 +1,8 @@
 module Api
   module V1
     class NotesController < ApplicationController
-      before_action :pre_check, only: [:update, :throwAway, :archive, :unarchive, :destroy]
-      before_action :pre_index_check, only: [:index]
+      before_action :pre_check, only: [:update]
+      before_action :pre_index_check, only: [:index, :search]
 
       # FIXME: Can't verify CSRF token authenticity.
       protect_from_forgery
@@ -37,35 +37,49 @@ module Api
 
       # メモを削除（ゴミ箱に移動）
       def throwAway
-        if @note.update(is_trash: true)
-          response = { status: 'SUCCESS', data: @note }
-        else
-          response = { status: 'ERROR', data: @note.errors }
-        end
+        # ','区切りで受け取ったidを型変換
+        id_params_arr = params[:id].split(',')
+        data = Note.where(user_id: params[:user_id])
+                    .merge(Note.where(id: id_params_arr))
+                    .update_all(is_trash: true)
+        response = { status: 'SUCCESS', data: data }
+        pretty_json response
+      end
+
+      # ゴミ箱から復元する。
+      def restoreNote
+        id_params_arr = params[:id].split(',')
+        data = Note.where(user_id: params[:user_id])
+                    .merge(Note.where(id: id_params_arr))
+                    .update_all(is_trash: false)
+        response = { status: 'SUCCESS', data: data }
         pretty_json response
       end
 
       def archive
-        if @note.update(is_archived: true)
-          response = { status: 'SUCCESS', data: @note }
-        else
-          response = { status: 'ERROR', data: @note.errors }
-        end
+        id_params_arr = params[:id].split(',')
+        data = Note.where(user_id: params[:user_id])
+                    .merge(Note.where(id: id_params_arr))
+                    .update_all(is_archived: true)
+        response = { status: 'SUCCESS', data: data }
         pretty_json response
       end
 
       def unarchive
-        if @note.update(is_archived: false)
-          response = { status: 'SUCCESS', data: @note }
-        else
-          response = { status: 'ERROR', data: @note.errors }
-        end
+        id_params_arr = params[:id].split(',')
+        data = Note.where(user_id: params[:user_id])
+                    .merge(Note.where(id: id_params_arr))
+                    .update_all(is_archived: false)
+        response = { status: 'SUCCESS', data: data }
         pretty_json response
       end
 
       # メモを完全に削除（ゴミ箱から削除）
       def destroy
-        @note.destroy
+        id_params_arr = params[:id].split(',')
+        data = Note.where(user_id: params[:user_id]).merge(Note.where(id: id_params_arr)).destroy_all
+        response = { status: 'SUCCESS', data: data }
+        pretty_json response
       end
 
       def emptyTrash
@@ -76,6 +90,19 @@ module Api
 
       # メモを検索
       def search
+        keyword = params[:search_word]
+        sanitized_keyword = Note.sanitize_sql_like(keyword)
+        like_query = 'title like ? or content like ?'
+        # 部分一致検索を実行
+        data = Note.select("notes.*").eager_load(:labels)
+                   .order(updated_at: "DESC")
+                   .where(user_id: params[:user_id])
+                   .where(@indexParams)
+                  .where(like_query, "%#{sanitized_keyword}%", "%#{sanitized_keyword}%")
+        # ラベル情報をネストしたnoteのjsonを取得し、配列型に変換する。
+        hierarchy_data = JSON.parse(data.to_json(include: [{labels: {only: [:id, :name] }}]))
+        response = { status: 'SUCCESS', data: hierarchy_data }
+        pretty_json response
       end
 
       private
