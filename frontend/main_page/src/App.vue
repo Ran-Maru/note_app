@@ -56,12 +56,15 @@ export default {
       labels.value = param
     }
 
+    const getLabels = () => labels
+
     const setNotes = (param) => {
       notes.value = param
     }
 
     provide('setLabels', setLabels)
     provide('setNotes', setNotes)
+    provide('getLabels', getLabels())
 
     onMounted (()=> {
       getNoteList()
