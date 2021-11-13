@@ -1,6 +1,7 @@
 <template>
   <button @click="getNoteList()">一覧取得</button>
   <button @click="getLabelList()">ラベル一覧取得</button>
+  <SearchBox @setNotes="setNotes"></SearchBox>
   <MainMenu 
     :labelList="labels"  
     @getNoteList="getNoteList"
@@ -15,13 +16,15 @@ import axios from 'axios'
 import { API } from './const'
 import MainMenu from './components/MainMenu.vue'
 import NoteList from './components/NoteList.vue'
+import SearchBox from './components/SearchBox.vue'
 
 export default {
   name: 'App',
   components: {
     NoteList,
-    MainMenu
-  },
+    MainMenu,
+    SearchBox
+},
   setup(){
     let notes = ref('')
     let labels = ref('')
@@ -53,7 +56,12 @@ export default {
       labels.value = param
     }
 
+    const setNotes = (param) => {
+      notes.value = param
+    }
+
     provide('setLabels', setLabels)
+    provide('setNotes', setNotes)
 
     onMounted (()=> {
       getNoteList()
@@ -66,6 +74,7 @@ export default {
       setLabels,
       notes,
       labels,
+      setNotes
     }
   }
 }
