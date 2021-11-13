@@ -4,8 +4,7 @@
     <div id="overlay" v-show="showContent">
       <div id="content">
         <p>ラベルの編集</p>
-        <input placeholder="新しいラベルを作成" id="labelForm">
-        <button @click="createLabel(labelList)">ラベルを作成</button>
+        <LabelInputField/>
         <ul v-if="labelList" class="label-list">
           <li v-for="n of labelList.length" :key="n">
             <button @click='deleteLabel(labelList[n-1])'>削除</button>
@@ -24,9 +23,13 @@
 import axios from 'axios'
 import { ref, computed, inject } from 'vue'
 import { API } from '../const'
+import LabelInputField from './LabelInputField.vue'
 
 export default {
   name: 'LabelEditDialog',
+  components: {
+    LabelInputField
+  },
   props: {
     labelList:{}
   },
@@ -45,28 +48,6 @@ export default {
     }
 
     const setLabels = inject('setLabels')
-
-    const createLabel = (labelList) => {
-      const inputValue = document.getElementById("labelForm").value
-      if (!inputValue) {
-        return
-      }
-      
-      for (let label of labelList){
-        if (inputValue === label.name){
-          alert('同名のラベルが既に存在するため、作成できません。')
-          return
-        }
-      }
-      
-      axios.post(API.LABELS, {name: inputValue, user_id: '1'})
-      .then( response => {
-        setLabels(response.data.data)
-      })
-      .catch((e) => {
-        err.value = e
-      })
-    }
 
     const deleteLabel = (label) => {
       const params = { user_id: '1'}
@@ -113,7 +94,6 @@ export default {
       showContent,
       openModal,
       closeModal,
-      createLabel,
       deleteLabel,
       renameLabel
     }
