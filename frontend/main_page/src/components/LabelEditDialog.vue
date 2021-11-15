@@ -8,8 +8,8 @@
         <ul v-if="labelList" class="label-list">
           <li v-for="n of labelList.length" :key="n">
             <button @click='deleteLabel(labelList[n-1])'>削除</button>
-            <input type="text" :value="propsLabels[n-1].name" :id="'inputValue'+ String(n-1)">
-            <button @click='renameLabel(labelList, n-1)'>更新</button>
+            <input type="text" :value="propsLabels[n-1].name">
+            <button @click='renameLabel(labelList, n-1, $event)'>更新</button>
             <p>{{ labelList[n-1 ]}}</p>
           </li>
         </ul>
@@ -60,10 +60,9 @@ export default {
       })
     }
 
-    const renameLabel = (labelList, nth) => { 
+    const renameLabel = (labelList, nth, event) => { 
       // 処理対象input要素のvalueを取得する。
-      const inputValue = 
-        document.getElementById("inputValue" + String(nth)).value
+      const inputValue = event.target.previousElementSibling.value
       const oldValue = labelList[nth].name
       
       if (inputValue === oldValue) {
