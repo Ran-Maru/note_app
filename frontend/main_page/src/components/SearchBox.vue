@@ -19,7 +19,7 @@ export default {
     watch(searchWords, () => searchNotes());
 
     const searchNotes = () => {
-      if(!searchWords.value){
+      if(searchWords.value.length < 2){
         return
       }
 
