@@ -1,7 +1,7 @@
 <template>
   <div>
     <br>
-    <button @click="getNoteList()">メモ</button>
+    <button @click="getNoteList()" id="notes-button">メモ</button>
     <br>
     <button>リマインダー</button>
     <ul v-if="labelList" class="label-list">

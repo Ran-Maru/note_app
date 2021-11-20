@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="search" v-model='searchWords'>
+    <input type="search" v-model='searchWords' @blur="offFocus">
   </div>
 </template>
 
@@ -30,8 +30,14 @@ export default {
       })
     }
 
+    // カーソルが外れると、メインメニューのメモボタンが押された状態になる。
+    const offFocus = () => {
+      document.getElementById("notes-button").click();
+    }
+
     return{
-      searchWords
+      searchWords,
+      offFocus
     }
   }
 }
