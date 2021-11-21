@@ -1,10 +1,16 @@
 <template>
   <div v-if="note">
-    <div>
-      <input type="checkbox">
-      <button data-bs-toggle="modal" :data-bs-target="bsTarget">
-        {{note.title || "[タイトルなし]"}} {{note.content || "[本文なし]"}}
-      </button>
+    <input type="checkbox">
+    <div class="card" style="width: 18rem;">
+      <div data-bs-toggle="modal" :data-bs-target="bsTarget">
+        <div class="card-body">
+          <h5 class="card-title"> {{note.title || "[タイトルなし]"}} </h5>
+          <p class="card-text">{{note.content || "[本文なし]"}}</p>
+        </div>
+      </div>
+      <div class="card-footer">
+        <!-- ここにも削除ボタン等を追加する。 -->
+      </div>
     </div>
     <div class="modal" :id="modalId" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
