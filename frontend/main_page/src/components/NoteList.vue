@@ -1,5 +1,6 @@
 <template>
   <div>
+      <br>
       <ul v-if="noteList" class="note-list"> 
         <li v-for="n of noteList.data.length" :key="n">
           <NoteListItem 

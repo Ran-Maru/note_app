@@ -1,13 +1,30 @@
 <template>
   <div v-if="note">
-    <p>{{note}}</p>
-    <p>タイトルと本文</p>
-    <input type="checkbox">
-    <input type="text" v-model="propsNote['title']">
-    <textarea v-model="propsNote['content']"></textarea>
-    <button @click='update(note)'>更新</button>
-    <button @click='throwAway(note.id)'>削除</button>
-    <LabelCheckList :note="note"></LabelCheckList>
+    <div>
+      <input type="checkbox">
+      <button data-bs-toggle="modal" :data-bs-target="bsTarget">
+        {{note.title || "[タイトルなし]"}} {{note.content || "[本文なし]"}}
+      </button>
+    </div>
+    <div class="modal" :id="modalId" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <input type="text" v-model="propsNote['title']">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <textarea v-model="propsNote['content']"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button @click='update(note)'>更新</button>
+            <button type="button" data-bs-dismiss="modal">閉じる</button>
+            <button @click='throwAway(note.id)'>削除</button>
+            <LabelCheckList :note="note"></LabelCheckList>
+          </div>    
+        </div>    
+      </div>
+    </div>
   </div>
 </template>
 
@@ -29,6 +46,11 @@ export default {
   setup(props){
     let err = ref('')
     const propsNote = computed(() => props.note ).value
+    // Bootstrapによるモーダル操作のために必要
+    let modalId = ref('')
+    modalId.value = "myModal" + propsNote.id
+    let bsTarget = ref('')
+    bsTarget.value = "#" + modalId.value
 
     const update = (note) => {
       axios.patch(API.NOTES + note.id,
@@ -48,6 +70,8 @@ export default {
     return {
       err,
       propsNote,
+      modalId,
+      bsTarget,
       update,
       throwAway,
     }
