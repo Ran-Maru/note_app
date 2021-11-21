@@ -1,6 +1,5 @@
 <template>
   <div>
-      <NotePostField></NotePostField>
       <ul v-if="noteList" class="note-list"> 
         <li v-for="n of noteList.data.length" :key="n">
           <NoteListItem 
@@ -14,14 +13,12 @@
 
 <script>
 import axios from 'axios'
-import NotePostField from './NotePostField.vue'
 import NoteListItem from './NoteListItem.vue'
 import { API } from '../const'
 
 export default {
   name: 'NoteList',
   components: {
-    NotePostField,
     NoteListItem
   },
 

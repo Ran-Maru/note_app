@@ -7,6 +7,7 @@
     @getNoteList="getNoteList"
     @setLabels="setLabels"
     ></MainMenu>
+  <NotePostField></NotePostField>
   <NoteList :noteList="notes" :labelList="labels"></NoteList>
 </template>
 
@@ -15,6 +16,7 @@ import { ref, onMounted, provide }from 'vue'
 import axios from 'axios'
 import { API } from './const'
 import MainMenu from './components/MainMenu.vue'
+import NotePostField from './components/NotePostField.vue'
 import NoteList from './components/NoteList.vue'
 import SearchBox from './components/SearchBox.vue'
 
@@ -23,6 +25,7 @@ export default {
   components: {
     NoteList,
     MainMenu,
+    NotePostField,
     SearchBox
 },
   setup(){
