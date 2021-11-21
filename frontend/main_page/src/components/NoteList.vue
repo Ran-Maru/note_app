@@ -1,10 +1,12 @@
 <template>
   <div>
-    タイトル
-    <input type="text" v-model='title'>
-    内容
-    <textarea v-model='content'></textarea>
-    <button @click='postNote(title, content)'>メモ作成</button>
+    <button v-if="!postFormVisible" @click="toggleForm">メモを入力</button>
+    <div v-if="postFormVisible">
+      <input type="text" v-model='title' placeholder="タイトル">
+      <textarea v-model='content' placeholder="メモを入力..."></textarea>
+      <button @click='postNote(title, content)'>メモ作成</button>
+      <button @click="toggleForm">保存せずに閉じる</button>
+    </div>
       <ul v-if="noteList" class="note-list"> 
         <li v-for="n of noteList.data.length" :key="n">
           <NoteListItem 
@@ -35,6 +37,15 @@ export default {
   setup(props){
     let title = ref('')
     let content = ref('')
+    let postFormVisible = ref(false)
+
+    // 表示・非表示を切り替える。
+    const toggleForm = () => {
+      postFormVisible.value = !postFormVisible.value
+      // 入力フォーム初期化
+      title.value = ''
+      content.value = ''
+    }
 
     const postNote = (title, content) => {
       axios.post(API.NOTES, {title: title, content: content, user_id:'1'})
@@ -45,6 +56,7 @@ export default {
       .catch((e) => {
         this.value = e
       })
+      toggleForm()
     }
 
     const throwAway = (noteId) => {
@@ -58,6 +70,8 @@ export default {
       notes: props.notes,
       title,
       content,
+      postFormVisible,
+      toggleForm,
       postNote,
       throwAway
     }
