@@ -29,7 +29,7 @@ export default {
     noteList: {},
     labelList:{}
   },
-  setup(props){
+  setup(){
 
     const throwAway = (noteId) => {
       axios.post(API.NOTES_TRASH, {id: noteId, user_id:'1'})
@@ -39,7 +39,6 @@ export default {
     }
     
     return {
-      notes: props.notes,
       throwAway
     }
   }
