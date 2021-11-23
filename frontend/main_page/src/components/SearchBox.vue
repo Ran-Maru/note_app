@@ -30,8 +30,11 @@ export default {
       })
     }
 
-    // カーソルが外れると、メインメニューのメモボタンが押された状態になる。
+    // 未入力状態でカーソルが外れると、メインメニューのメモボタンが押された状態になる。
     const offFocus = () => {
+      if(searchWords.value.length >= 1){
+        return
+      }
       document.getElementById("notes-button").click();
     }
 
