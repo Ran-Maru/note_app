@@ -1,19 +1,28 @@
 <template>
   <div>
-    <button @click="openModal">ラベルの編集</button>
-    <div id="overlay" v-show="showContent">
-      <div id="content">
-        <p>ラベルの編集</p>
-        <LabelInputField/>
-        <ul v-if="labelList" class="label-list">
-          <li v-for="n of labelList.length" :key="n">
-            <button @click='deleteLabel(labelList[n-1])'>削除</button>
-            <input type="text" :value="propsLabels[n-1].name">
-            <button @click='renameLabel(labelList, n-1, $event)'>更新</button>
-            <p>{{ labelList[n-1 ]}}</p>
-          </li>
-        </ul>
-        <button @click="closeModal">閉じる</button>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#labelEditModal">ラベルの編集</button>
+    <div class="modal" id="labelEditModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h7 class="modal-title">ラベルの編集</h7>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+          <LabelInputField/>
+          <ul v-if="labelList" class="label-list">
+              <li v-for="n of labelList.length" :key="n">
+                <button @click='deleteLabel(labelList[n-1])'>削除</button>
+                <input type="text" :value="propsLabels[n-1].name">
+                <button @click='renameLabel(labelList, n-1, $event)'>更新</button>
+                <p>{{ labelList[n-1 ]}}</p>
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-bs-dismiss="modal">閉じる</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -35,18 +44,8 @@ export default {
   },
 
   setup(props){
-    let showContent = ref(false)
     let err = ref('')
     const propsLabels = computed(() => props.labelList )
-
-    const openModal = () => {
-      showContent.value = true
-    }
-  
-    const closeModal = () => {
-      showContent.value = false
-    }
-
     const setLabels = inject('setLabels')
 
     const deleteLabel = (label) => {
@@ -90,9 +89,6 @@ export default {
 
     return{
       propsLabels,
-      showContent,
-      openModal,
-      closeModal,
       deleteLabel,
       renameLabel
     }
@@ -119,12 +115,12 @@ export default {
   justify-content: center;
 }
 
-#content{
+/* #content{
   z-index:2;
   width:50%;
   padding: 1em;
   background:#fff;
-}
+} */
 
 .label-list{
   list-style: none;
