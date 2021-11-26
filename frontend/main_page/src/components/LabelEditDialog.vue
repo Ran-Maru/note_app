@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button type="button" data-bs-toggle="modal" data-bs-target="#labelEditModal">ラベルの編集</button>
+    <a class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#labelEditModal">ラベルの編集</a>
     <div class="modal" id="labelEditModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
         <div class="modal-content">

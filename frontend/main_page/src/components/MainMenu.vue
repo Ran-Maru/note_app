@@ -1,21 +1,19 @@
 <template>
   <div>
-    <br>
-    <button @click="getNoteList()" id="notes-button">メモ</button>
-    <br>
-    <button>リマインダー</button>
-    <ul v-if="labelList" class="label-list">
-      <li v-for="n of labelList.length" :key="n">
-        <button @click="getLabeledNoteList(labelList[n-1].id)">
-          {{labelList[n-1].name}}
-        </button>
-      </li>
-    </ul>
-    <LabelEditDialog :labelList="labelList"></LabelEditDialog>
-    <br>
-    <button @click="getArchivedList()">アーカイブ</button>
-    <br>
-    <button @click="getTrashList()">ゴミ箱</button>
+    <nav class="nav nav-pills flex-column">
+      <a class="nav-link" href="#" @click="getNoteList()" id="notes-button">メモ</a>
+      <a class="nav-link" href="#">リマインダー</a>
+      <ul v-if="labelList" class="label-list">
+        <li v-for="n of labelList.length" :key="n">
+          <a class="nav-link" href="#" @click="getLabeledNoteList(labelList[n-1].id)">
+            {{labelList[n-1].name}}
+          </a>
+        </li>
+      </ul>
+      <LabelEditDialog :labelList="labelList"></LabelEditDialog>
+      <a class="nav-link" href="#" @click="getArchivedList()">アーカイブ</a>
+      <a class="nav-link" href="#" @click="getTrashList()">ゴミ箱</a>
+    </nav>
   </div>
 </template>
 
