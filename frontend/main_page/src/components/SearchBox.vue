@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="search" v-model='searchWords' @blur="offFocus">
+    <input type="search" v-model='searchWords' @blur="offFocus" placeholder="検索">
   </div>
 </template>
 

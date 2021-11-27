@@ -6,7 +6,7 @@
         <div data-bs-toggle="modal" :data-bs-target="bsTarget">
           <div class="card-body">
             <h5 class="card-title"> {{note.title || "[タイトルなし]"}} </h5>
-            <p class="card-text">{{note.content || "[本文なし]"}}</p>
+            <p class="card-text">{{note.content || "[メモ本文なし]"}}</p>
           </div>
         </div>
         <div class="card-footer">
@@ -18,11 +18,11 @@
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
-            <input type="text" v-model="propsNote['title']">
+            <input type="text" v-model="propsNote['title']" placeholder="タイトル">
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <textarea v-model="propsNote['content']"></textarea>
+            <textarea v-model="propsNote['content']" placeholder="メモ"></textarea>
           </div>
           <div class="modal-footer">
             <button @click='update(note)'>更新</button>
