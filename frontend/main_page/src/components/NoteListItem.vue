@@ -5,8 +5,11 @@
       <div class="card" style="width: 18rem;">
         <div data-bs-toggle="modal" :data-bs-target="bsTarget">
           <div class="card-body">
-            <h5 class="card-title"> {{note.title || "[タイトルなし]"}} </h5>
-            <p class="card-text">{{note.content || "[メモ本文なし]"}}</p>
+            <h5 class="card-title"> {{note.title}}</h5>
+            <p class="card-text">{{note.content}}</p>
+            <div v-if="!note.title && !note.content">
+              <h5 class="card-title"> 空のメモ</h5>
+            </div>
           </div>
         </div>
         <div class="card-footer">
