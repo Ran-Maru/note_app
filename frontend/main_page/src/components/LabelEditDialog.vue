@@ -9,8 +9,8 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-          <LabelInputField/>
-          <ul v-if="labelList" class="label-list">
+            <LabelInputField/>
+            <ul v-if="labelList" class="label-list">
               <li v-for="n of labelList.length" :key="n">
                 <button @click='deleteLabel(labelList[n-1])'>削除</button>
                 <input type="text" :value="propsLabels[n-1].name">
