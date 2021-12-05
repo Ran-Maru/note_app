@@ -1,14 +1,18 @@
 <template>
-  <button @click="getNoteList()">一覧取得</button>
-  <button @click="getLabelList()">ラベル一覧取得</button>
-  <SearchBox @setNotes="setNotes"></SearchBox>
-  <MainMenu 
-    :labelList="labels"  
-    @getNoteList="getNoteList"
-    @setLabels="setLabels"
-    ></MainMenu>
-  <NotePostField></NotePostField>
-  <NoteList :noteList="notes" :labelList="labels"></NoteList>
+  <div>
+    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+      <button @click="getNoteList()">一覧取得</button>
+      <button @click="getLabelList()">ラベル一覧取得</button>
+      <SearchBox @setNotes="setNotes"></SearchBox>
+    </header>
+    <MainMenu 
+      :labelList="labels"  
+      @getNoteList="getNoteList"
+      @setLabels="setLabels"
+      ></MainMenu>
+    <NotePostField></NotePostField>
+    <NoteList :noteList="notes" :labelList="labels"></NoteList>
+  </div>
 </template>
 
 <script>
@@ -26,7 +30,7 @@ export default {
     NoteList,
     MainMenu,
     NotePostField,
-    SearchBox
+    SearchBox,
 },
   setup(){
     let notes = ref('')
