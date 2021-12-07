@@ -5,13 +5,24 @@
       <button @click="getLabelList()">ラベル一覧取得</button>
       <SearchBox @setNotes="setNotes"></SearchBox>
     </header>
-    <MainMenu 
-      :labelList="labels"  
-      @getNoteList="getNoteList"
-      @setLabels="setLabels"
-      ></MainMenu>
-    <NotePostField></NotePostField>
-    <NoteList :noteList="notes" :labelList="labels"></NoteList>
+    <div class="container-fluid">
+      <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"
+          style="overflow-y: auto; position: fixed; top:20px; height: 600px;">
+          <div class="position-sticky pt-3">
+            <MainMenu 
+              :labelList="labels"  
+              @getNoteList="getNoteList"
+              @setLabels="setLabels"
+              ></MainMenu>
+          </div>
+        </nav>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <NotePostField></NotePostField>
+          <NoteList :noteList="notes" :labelList="labels"></NoteList>
+        </main>
+      </div>
+    </div>
   </div>
 </template>
 
