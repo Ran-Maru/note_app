@@ -1,28 +1,55 @@
 <template>
   <div v-if="note">
-    <p>{{note}}</p>
-    <p>タイトルと本文</p>
-    <input type="checkbox">
-    <input type="text" v-model="propsNote['title']">
-    <textarea v-model="propsNote['content']"></textarea>
-    <button @click='update(note)'>更新</button>
-    <button @click='throwAway(note.id)'>削除</button>
-      <ul v-if="labelList" class="label-list">
-        <li v-for="n of labelList.length" :key="n">
-           <input type="checkbox" :id="'label' + note.id + labelList[n-1].id" @change="checkBox(note, labelList[n-1])">
-           {{ labelList[n-1].name}}
-        </li>
-      </ul>
+    <div class="col">
+      <input type="checkbox">
+      <div class="card" style="width: 18rem;">
+        <div data-bs-toggle="modal" :data-bs-target="bsTarget">
+          <div class="card-body">
+            <h5 class="card-title"> {{note.title}}</h5>
+            <p class="card-text">{{note.content}}</p>
+            <div v-if="!note.title && !note.content">
+              <h5 class="card-title"> 空のメモ</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <!-- ここにも削除ボタン等を追加する。 -->
+        </div>
+      </div>
     </div>
+    <div class="modal" :id="modalId" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <input type="text" v-model="propsNote['title']" placeholder="タイトル">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <textarea v-model="propsNote['content']" placeholder="メモ"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button @click='update(note)'>更新</button>
+            <button type="button" data-bs-dismiss="modal">閉じる</button>
+            <button @click='throwAway(note.id)'>削除</button>
+            <LabelCheckList :note="note"></LabelCheckList>
+          </div>    
+        </div>    
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import axios from 'axios'
-import { ref, computed, onUpdated } from 'vue'
+import { ref, computed } from 'vue'
 import { API } from '../const'
+import LabelCheckList from './LabelCheckList.vue'
 
 export default {
-  name: 'NoteListItem',
+  name: 'NoteListItem',  
+  components: {
+    LabelCheckList
+  },
   props: {
     note :Object,
     labelList:{}
@@ -30,25 +57,11 @@ export default {
   setup(props){
     let err = ref('')
     const propsNote = computed(() => props.note ).value
-
-    const initCheckmark = () => {
-      const note = props.note
-      const labelList = props.labelList
-      
-      //すべてのチェックボックスのチェックを外す。
-      for(const label of labelList) {
-        const box = document.getElementById("label" + note.id +  label.id)
-        box.checked  = false
-      }
-      
-      // 該当のチェックボックスにチェックを入れる。
-      for(const attachedLabel of note.labels) {
-        const box = document.getElementById("label" + note.id + attachedLabel.id)
-        if (box){
-          box.checked  = true
-        }
-      }
-    }
+    // Bootstrapによるモーダル操作のために必要
+    let modalId = ref('')
+    modalId.value = "myModal" + propsNote.id
+    let bsTarget = ref('')
+    bsTarget.value = "#" + modalId.value
 
     const update = (note) => {
       axios.patch(API.NOTES + note.id,
@@ -65,40 +78,13 @@ export default {
       })
     }
 
-    const checkBox = (note, label) => {
-      const isChecked = document.getElementById("label" + note.id + label.id).checked
-      if (isChecked) {
-        $_checkOn(note, label)
-      } else {
-        $_checkOff(note, label)
-      }
-    }
-
-    const $_checkOn = (note, label) => {
-      axios.post(API.LABELINGS, {note_id: note.id, label_id: label.id})
-      .catch((err) => {
-        this.err = err
-      })
-    }
-    
-    const $_checkOff = (note, label) => {
-      axios.post(API.LABELINGS_DESTROY, {note_id: note.id, label_id: label.id})
-      .catch((err) => {
-        this.err = err
-      })
-    }
-
-    onUpdated(() => {
-      initCheckmark()
-    })
-
     return {
       err,
       propsNote,
-      initCheckmark,
+      modalId,
+      bsTarget,
       update,
       throwAway,
-      checkBox
     }
   },
 }

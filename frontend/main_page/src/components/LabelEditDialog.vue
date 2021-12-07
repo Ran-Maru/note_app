@@ -1,20 +1,28 @@
 <template>
   <div>
-    <button @click="openModal">ラベルの編集</button>
-    <div id="overlay" v-show="showContent">
-      <div id="content">
-        <p>ラベルの編集</p>
-        <input placeholder="新しいラベルを作成" id="labelForm">
-        <button @click="createLabel(labelList)">ラベルを作成</button>
-        <ul v-if="labelList" class="label-list">
-          <li v-for="n of labelList.length" :key="n">
-            <button @click='deleteLabel(labelList[n-1])'>削除</button>
-            <input type="text" :value="propsLabels[n-1].name" :id="'inputValue'+ String(n-1)">
-            <button @click='renameLabel(labelList, n-1)'>更新</button>
-            <p>{{ labelList[n-1 ]}}</p>
-          </li>
-        </ul>
-        <button @click="closeModal">閉じる</button>
+    <a class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#labelEditModal">ラベルの編集</a>
+    <div class="modal" id="labelEditModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h7 class="modal-title">ラベルの編集</h7>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <LabelInputField/>
+            <ul v-if="labelList" class="label-list">
+              <li v-for="n of labelList.length" :key="n">
+                <button @click='deleteLabel(labelList[n-1])'>削除</button>
+                <input type="text" :value="propsLabels[n-1].name">
+                <button @click='renameLabel(labelList, n-1, $event)'>更新</button>
+                <p>{{ labelList[n-1 ]}}</p>
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-bs-dismiss="modal">閉じる</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -24,49 +32,21 @@
 import axios from 'axios'
 import { ref, computed, inject } from 'vue'
 import { API } from '../const'
+import LabelInputField from './LabelInputField.vue'
 
 export default {
   name: 'LabelEditDialog',
+  components: {
+    LabelInputField
+  },
   props: {
     labelList:{}
   },
 
   setup(props){
-    let showContent = ref(false)
     let err = ref('')
     const propsLabels = computed(() => props.labelList )
-
-    const openModal = () => {
-      showContent.value = true
-    }
-  
-    const closeModal = () => {
-      showContent.value = false
-    }
-
     const setLabels = inject('setLabels')
-
-    const createLabel = (labelList) => {
-      const inputValue = document.getElementById("labelForm").value
-      if (!inputValue) {
-        return
-      }
-      
-      for (let label of labelList){
-        if (inputValue === label.name){
-          alert('同名のラベルが既に存在するため、作成できません。')
-          return
-        }
-      }
-      
-      axios.post(API.LABELS, {name: inputValue, user_id: '1'})
-      .then( response => {
-        setLabels(response.data.data)
-      })
-      .catch((e) => {
-        err.value = e
-      })
-    }
 
     const deleteLabel = (label) => {
       const params = { user_id: '1'}
@@ -79,10 +59,9 @@ export default {
       })
     }
 
-    const renameLabel = (labelList, nth) => { 
+    const renameLabel = (labelList, nth, event) => { 
       // 処理対象input要素のvalueを取得する。
-      const inputValue = 
-        document.getElementById("inputValue" + String(nth)).value
+      const inputValue = event.target.previousElementSibling.value
       const oldValue = labelList[nth].name
       
       if (inputValue === oldValue) {
@@ -110,10 +89,6 @@ export default {
 
     return{
       propsLabels,
-      showContent,
-      openModal,
-      closeModal,
-      createLabel,
       deleteLabel,
       renameLabel
     }
@@ -140,12 +115,12 @@ export default {
   justify-content: center;
 }
 
-#content{
+/* #content{
   z-index:2;
   width:50%;
   padding: 1em;
   background:#fff;
-}
+} */
 
 .label-list{
   list-style: none;

@@ -5,6 +5,7 @@ const API_BASE = DOMAIN + 'api/v1/'
 const API = {
   NOTES: API_BASE + 'notes/',
   NOTES_TRASH: API_BASE + 'notes/trash/',
+  NOTES_SEARCH: API_BASE + 'notes/search/',
   LABELS: API_BASE + 'labels/',
   LABELINGS: API_BASE + 'labelings/',
   LABELINGS_DESTROY: API_BASE + 'labelings/destroy/'
