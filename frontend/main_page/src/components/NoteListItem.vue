@@ -28,9 +28,9 @@
             <textarea v-model="propsNote['content']" placeholder="メモ"></textarea>
           </div>
           <div class="modal-footer">
-            <button @click='update(note)'>更新</button>
+            <button @click='update(note)' type="button" data-bs-dismiss="modal">更新</button>
             <button type="button" data-bs-dismiss="modal">閉じる</button>
-            <button @click='throwAway(note.id)'>削除</button>
+            <button @click='throwAway(note.id)' type="button" data-bs-dismiss="modal">削除</button>
             <LabelCheckList :note="note"></LabelCheckList>
           </div>    
         </div>    
