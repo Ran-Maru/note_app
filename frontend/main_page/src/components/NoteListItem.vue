@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <button @click='throwAway(note.id)'>削除</button>
+          <span @click='throwAway(note.id)' class="material-icons" style="cursor:pointer;">delete</span>
         </div>
       </div>
     </div>
@@ -30,7 +30,7 @@
           <div class="modal-footer">
             <button @click='update(note)' type="button" data-bs-dismiss="modal">更新</button>
             <button type="button" data-bs-dismiss="modal">閉じる</button>
-            <button @click='throwAway(note.id)' type="button" data-bs-dismiss="modal">削除</button>
+            <span @click='throwAway(note.id)' type="button" data-bs-dismiss="modal" class="material-icons" style="cursor:pointer;">delete</span>
             <LabelCheckList :note="note"></LabelCheckList>
           </div>    
         </div>    
