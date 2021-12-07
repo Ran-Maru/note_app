@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <!-- ここにも削除ボタン等を追加する。 -->
+          <button @click='throwAway(note.id)'>削除</button>
         </div>
       </div>
     </div>
