@@ -17,9 +17,7 @@
 </template>
 
 <script>
-import axios from 'axios'
 import NoteListItem from './NoteListItem.vue'
-import { API } from '../const'
 
 export default {
   name: 'NoteList',
@@ -31,19 +29,6 @@ export default {
     noteList: {},
     labelList:{}
   },
-  setup(){
-
-    const throwAway = (noteId) => {
-      axios.post(API.NOTES_TRASH, {id: noteId, user_id:'1'})
-      .catch((e) => {
-        this.err = e
-      })
-    }
-    
-    return {
-      throwAway
-    }
-  }
 }
 </script>
 
