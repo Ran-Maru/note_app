@@ -72,7 +72,7 @@ export default {
     }
 
     const throwAway = (noteId) => {
-      axios.post(API.NOTES_TRASH, {id: noteId, user_id:'1'})
+      axios.post(API.NOTES_TRASH, {id: String(noteId), user_id:'1'})
       .catch((err) => {
         this.err = err
       })
