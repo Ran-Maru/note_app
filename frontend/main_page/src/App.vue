@@ -24,6 +24,7 @@
       </div>
     </div>
   </div>
+  <LabelEditDialog :labelList="labels"></LabelEditDialog>
 </template>
 
 <script>
@@ -34,6 +35,7 @@ import MainMenu from './components/MainMenu.vue'
 import NotePostField from './components/NotePostField.vue'
 import NoteList from './components/NoteList.vue'
 import SearchBox from './components/SearchBox.vue'
+import LabelEditDialog from './components/LabelEditDialog.vue'
 
 export default {
   name: 'App',
@@ -42,6 +44,7 @@ export default {
     MainMenu,
     NotePostField,
     SearchBox,
+    LabelEditDialog
 },
   setup(){
     let notes = ref('')
