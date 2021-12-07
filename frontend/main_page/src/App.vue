@@ -88,7 +88,8 @@ export default {
     provide('getLabels', getLabels())
 
     onMounted (()=> {
-      getNoteList()
+      // 初期表示時に「メモ」ラベルが選択された状態になる。
+      document.getElementById("notes-button").click();
       getLabelList()
     })
 
