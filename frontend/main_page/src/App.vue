@@ -18,8 +18,16 @@
           </div>
         </nav>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-          <NotePostField></NotePostField>
-          <NoteList :noteList="notes" :labelList="labels"></NoteList>
+          <div class="container">
+            <div class="row pt-4">
+              <div class="col"></div>
+              <div class="col-6">
+                <NotePostField></NotePostField>
+              </div>
+              <div class="col"></div>
+            </div>
+            <NoteList :noteList="notes" :labelList="labels"></NoteList>
+          </div>
         </main>
       </div>
     </div>
