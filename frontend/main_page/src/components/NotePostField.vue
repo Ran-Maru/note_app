@@ -1,15 +1,30 @@
 <template>
   <div>
-    <button v-if="!postFormVisible" @click="toggleForm">メモを入力</button>
+    <div class="card" v-if="!postFormVisible" @click="toggleForm">
+      <div class="card-body">
+        <p class="card-text">メモを入力...</p>
+      </div>
+    </div>
     <div v-if="postFormVisible">
-      <input type="text" v-model='title' @keydown.enter="moveTab"
-        @compositionstart="composing=true"
-        @compositionend="composing=false"
-        placeholder="タイトル"
-      >
-      <textarea v-model='content' placeholder="メモを入力..."></textarea>
-      <button @click='postNote(title, content)'>メモ作成</button>
-      <button @click="toggleForm">保存せずに閉じる</button>
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">
+            <input type="text" v-model='title' @keydown.enter="moveTab"
+              @compositionstart="composing=true"
+              @compositionend="composing=false"
+              placeholder="タイトル"
+              style="width:100%"
+            >
+          </div>
+          <div class="card-text">
+            <textarea v-model='content' id="textPostField" placeholder="メモを入力..." style="width:100%"></textarea>
+          </div>
+          <div class="card-footer">
+            <button @click='postNote(title, content)'>メモ作成</button>
+            <button @click="toggleForm">保存せずに閉じる</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -42,8 +57,8 @@ export default {
       if (composing.value){
         return
       }
-      const dom = document.activeElement
-      dom.nextElementSibling.focus()
+      const dom = document.getElementById("textPostField")
+      dom.focus()
   }
 
     const postNote = (title, content) => {
