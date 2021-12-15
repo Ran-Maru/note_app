@@ -1,6 +1,5 @@
 <template>
   <div>
-    <a class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#labelEditModal">ラベルの編集</a>
     <div class="modal" id="labelEditModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
         <div class="modal-content">
@@ -12,7 +11,7 @@
             <LabelInputField/>
             <ul v-if="labelList" class="label-list">
               <li v-for="n of labelList.length" :key="n">
-                <button @click='deleteLabel(labelList[n-1])'>削除</button>
+                <span @click='deleteLabel(labelList[n-1])' class="material-icons" style="cursor:pointer;">delete</span>
                 <input type="text" :value="propsLabels[n-1].name">
                 <button @click='renameLabel(labelList, n-1, $event)'>更新</button>
                 <p>{{ labelList[n-1 ]}}</p>

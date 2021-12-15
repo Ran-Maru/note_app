@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <!-- ここにも削除ボタン等を追加する。 -->
+          <span @click='throwAway(note.id)' class="material-icons" style="cursor:pointer;">delete</span>
         </div>
       </div>
     </div>
@@ -28,9 +28,9 @@
             <textarea v-model="propsNote['content']" placeholder="メモ"></textarea>
           </div>
           <div class="modal-footer">
-            <button @click='update(note)'>更新</button>
+            <button @click='update(note)' type="button" data-bs-dismiss="modal">更新</button>
             <button type="button" data-bs-dismiss="modal">閉じる</button>
-            <button @click='throwAway(note.id)'>削除</button>
+            <span @click='throwAway(note.id)' type="button" data-bs-dismiss="modal" class="material-icons" style="cursor:pointer;">delete</span>
             <LabelCheckList :note="note"></LabelCheckList>
           </div>    
         </div>    
@@ -72,7 +72,7 @@ export default {
     }
 
     const throwAway = (noteId) => {
-      axios.post(API.NOTES_TRASH, {id: noteId, user_id:'1'})
+      axios.post(API.NOTES_TRASH, {id: String(noteId), user_id:'1'})
       .catch((err) => {
         this.err = err
       })

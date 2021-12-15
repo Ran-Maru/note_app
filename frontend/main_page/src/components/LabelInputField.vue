@@ -39,6 +39,8 @@ export default {
       axios.post(API.LABELS, {name: inputValue.value, user_id: '1'})
       .then( response => {
         setLabels(response.data.data)
+        // 入力値を初期化する。
+        inputValue.value = ""
       })
       .catch((e) => {
         err.value = e

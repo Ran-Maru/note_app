@@ -10,7 +10,7 @@
           </a>
         </li>
       </ul>
-      <LabelEditDialog :labelList="labelList"></LabelEditDialog>
+      <a class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#labelEditModal">ラベルの編集</a>
       <a class="nav-link" href="#" @click="getArchivedList($event)">アーカイブ</a>
       <a class="nav-link" href="#" @click="getTrashList($event)">ゴミ箱</a>
     </nav>
@@ -18,13 +18,8 @@
 </template>
 
 <script>
-import LabelEditDialog from './LabelEditDialog.vue'
-
 export default {
   name: 'MainMenu',
-  components: {
-    LabelEditDialog
-  },
 
   props: {
     labelList:{}

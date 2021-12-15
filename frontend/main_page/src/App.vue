@@ -5,14 +5,34 @@
       <button @click="getLabelList()">ラベル一覧取得</button>
       <SearchBox @setNotes="setNotes"></SearchBox>
     </header>
-    <MainMenu 
-      :labelList="labels"  
-      @getNoteList="getNoteList"
-      @setLabels="setLabels"
-      ></MainMenu>
-    <NotePostField></NotePostField>
-    <NoteList :noteList="notes" :labelList="labels"></NoteList>
+    <div class="container-fluid">
+      <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"
+          style="overflow-y: auto; position: fixed; top:20px; height: 600px;">
+          <div class="position-sticky pt-3">
+            <MainMenu 
+              :labelList="labels"  
+              @getNoteList="getNoteList"
+              @setLabels="setLabels"
+              ></MainMenu>
+          </div>
+        </nav>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <div class="container">
+            <div class="row pt-4">
+              <div class="col"></div>
+              <div class="col-6">
+                <NotePostField></NotePostField>
+              </div>
+              <div class="col"></div>
+            </div>
+            <NoteList :noteList="notes" :labelList="labels"></NoteList>
+          </div>
+        </main>
+      </div>
+    </div>
   </div>
+  <LabelEditDialog :labelList="labels"></LabelEditDialog>
 </template>
 
 <script>
@@ -23,6 +43,7 @@ import MainMenu from './components/MainMenu.vue'
 import NotePostField from './components/NotePostField.vue'
 import NoteList from './components/NoteList.vue'
 import SearchBox from './components/SearchBox.vue'
+import LabelEditDialog from './components/LabelEditDialog.vue'
 
 export default {
   name: 'App',
@@ -31,6 +52,7 @@ export default {
     MainMenu,
     NotePostField,
     SearchBox,
+    LabelEditDialog
 },
   setup(){
     let notes = ref('')
@@ -74,7 +96,8 @@ export default {
     provide('getLabels', getLabels())
 
     onMounted (()=> {
-      getNoteList()
+      // 初期表示時に「メモ」ラベルが選択された状態になる。
+      document.getElementById("notes-button").click();
       getLabelList()
     })
 
