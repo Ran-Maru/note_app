@@ -38,15 +38,15 @@
 <script>
 import { ref, onMounted, provide }from 'vue'
 import axios from 'axios'
-import { API } from './const'
-import MainMenu from './components/MainMenu.vue'
-import NotePostField from './components/NotePostField.vue'
-import NoteList from './components/NoteList.vue'
-import SearchBox from './components/SearchBox.vue'
-import LabelEditDialog from './components/LabelEditDialog.vue'
+import { API } from '../const'
+import MainMenu from './MainMenu.vue'
+import NotePostField from './NotePostField.vue'
+import NoteList from './NoteList.vue'
+import SearchBox from './SearchBox.vue'
+import LabelEditDialog from './LabelEditDialog.vue'
 
 export default {
-  name: 'App',
+  name: 'Main',
   components: {
     NoteList,
     MainMenu,
