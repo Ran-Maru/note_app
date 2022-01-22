@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_04_221956) do
+ActiveRecord::Schema.define(version: 9999_12_31_235959) do
 
   create_table "group_members", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "group_id"
@@ -71,5 +71,8 @@ ActiveRecord::Schema.define(version: 2021_11_04_221956) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "labelings", "labels"
+  add_foreign_key "labelings", "notes"
+  add_foreign_key "labels", "users"
   add_foreign_key "notes", "users"
 end
