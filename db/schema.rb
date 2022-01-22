@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_04_221956) do
+ActiveRecord::Schema.define(version: 9999_12_31_235959) do
 
   create_table "group_members", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "group_id"
@@ -26,17 +26,20 @@ ActiveRecord::Schema.define(version: 2021_11_04_221956) do
   end
 
   create_table "labelings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.integer "note_id"
-    t.integer "label_id"
+    t.bigint "note_id"
+    t.bigint "label_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["label_id"], name: "index_labelings_on_label_id"
+    t.index ["note_id"], name: "index_labelings_on_note_id"
   end
 
   create_table "labels", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.text "name"
-    t.integer "user_id"
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_labels_on_user_id"
   end
 
   create_table "notes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -68,5 +71,8 @@ ActiveRecord::Schema.define(version: 2021_11_04_221956) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "labelings", "labels"
+  add_foreign_key "labelings", "notes"
+  add_foreign_key "labels", "users"
   add_foreign_key "notes", "users"
 end
